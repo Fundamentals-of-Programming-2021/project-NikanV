@@ -57,12 +57,14 @@ int main() {
 
     //menu strings
     TTF_Init();
+    //credits
     TTF_Font* xeros = TTF_OpenFont("../fonts/xeros_theorem.ttf", 24);
     SDL_Color credits = {70, 255, 255};
     SDL_Texture* logo_tex;
     SDL_Rect logo_rec;
     get_text_and_rect(sdlRenderer, credits, SCREEN_WIDTH*29/100, SCREEN_HEIGHT*78/100,
                       SCREEN_WIDTH*40/100, SCREEN_HEIGHT*5/100,"Developed by Nikan Vasei", xeros, &logo_tex, &logo_rec);
+    //logo
     SDL_Texture* name_tex;
     SDL_Rect name_rec;
     get_text_and_rect(sdlRenderer, credits, SCREEN_WIDTH*23/100, SCREEN_HEIGHT*13/100,
