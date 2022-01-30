@@ -23,6 +23,7 @@ SDL_Window *sdlWindow;
 SDL_Renderer *sdlRenderer;
 
 TTF_Font* xeros;
+char* username;
 
 int min(int a, int b) {
     return a < b ? a : b;
@@ -61,6 +62,12 @@ void End(){
     SDL_Quit();
 
 }
+
+SDL_Color color(int r, int g, int b){
+    SDL_Color col = {r, g, b};
+
+   return col;
+}
 void get_text_and_rect(SDL_Color color, int x, int y, int w, int h, char *text,
                        SDL_Texture** texture, SDL_Rect* rect) {
     SDL_Surface *surface;
@@ -92,27 +99,28 @@ int main() {
 
     //strings
     //credits
-    SDL_Color credits = {70, 255, 255};
     SDL_Texture* logo_tex;
     SDL_Rect logo_rec;
-    get_text_and_rect(credits, SCREEN_WIDTH*29/100, SCREEN_HEIGHT*78/100,
+    get_text_and_rect(color(70, 255, 255), SCREEN_WIDTH*30/100, SCREEN_HEIGHT*78/100,
                       SCREEN_WIDTH*40/100, SCREEN_HEIGHT*5/100,"Developed by Nikan Vasei",
                       &logo_tex, &logo_rec);
     //logo
     SDL_Texture* name_tex;
     SDL_Rect name_rec;
-    get_text_and_rect(credits, SCREEN_WIDTH*23/100, SCREEN_HEIGHT*13/100,
+    get_text_and_rect(color(70, 255, 255), SCREEN_WIDTH*23/100, SCREEN_HEIGHT*13/100,
                       SCREEN_WIDTH*56/100, SCREEN_HEIGHT*20/100,"STATE.IO",
                       &name_tex, &name_rec);
 
     //text box
-    char* username = (char*)malloc(sizeof(char)*50);
-    username = "S";
+    username = (char*)malloc(sizeof(char)*15);
+    memset(username, '\0', (int)sizeof(username)*sizeof(char));
     SDL_Texture* input_tex;
     SDL_Rect input_rec;
+    get_text_and_rect(color(255, 255, 255), SCREEN_WIDTH*31/100, SCREEN_HEIGHT*57/100,
+                      19*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
+                      "Enter your username", &input_tex, &input_rec);
+
     bool render_text = false;
-    get_text_and_rect(credits, 500, 500,200, 100,username,
-                      &input_tex, &input_rec);
     SDL_StartTextInput();
 
 
@@ -124,6 +132,10 @@ int main() {
         SDL_RenderCopy(sdlRenderer, logo_tex, NULL, &logo_rec);
         SDL_RenderCopy(sdlRenderer, name_tex, NULL, &name_rec);
         SDL_RenderCopy(sdlRenderer, input_tex, NULL, &input_rec);
+        boxColor(sdlRenderer, SCREEN_WIDTH*27/100, SCREEN_HEIGHT*55/100,
+                 SCREEN_WIDTH*73/100, SCREEN_HEIGHT*55/100 + SCREEN_HEIGHT*1/100, 0xfff010ff);
+        boxColor(sdlRenderer, SCREEN_WIDTH*27/100, SCREEN_HEIGHT*64/100,
+                 SCREEN_WIDTH*73/100, SCREEN_HEIGHT*64/100 + SCREEN_HEIGHT*1/100, 0xfff010ff);
 
 
         SDL_Event Event;
@@ -135,26 +147,28 @@ int main() {
             }
             else if(Event.type == SDL_KEYDOWN){
                 if( Event.key.keysym.sym == SDLK_BACKSPACE && strlen(username) > 0 ){
-                    *(username + strlen(username) - 1) = '\0';
-                    printf("%s|", username);
+                    memset(username+strlen(username)-1, '\0', sizeof(char));
                     render_text = true;
                 }
             }
             else if(Event.type == SDL_TEXTINPUT){
-                printf("%s|", username);
-                *(username + strlen(username)) = 'n';
+                if(strlen(username) < 15) {
+                    memset(username + strlen(username), Event.text.text[0], sizeof(char));
+                }
                 render_text = true;
             }
 
         }
         if(render_text){
             if(strlen(username) > 0){
-                get_text_and_rect(credits, 500, 500,200, 100,username,
-                                  &input_tex, &input_rec);
+                get_text_and_rect(color(255, 255, 255), SCREEN_WIDTH*35/100, SCREEN_HEIGHT*57/100,
+                                  (int)strlen(username)*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
+                                  username, &input_tex, &input_rec);
             }
             else{
-                get_text_and_rect(credits, 500, 500,200, 100," ",
-                                  &input_tex, &input_rec);
+                get_text_and_rect(color(255, 255, 255), SCREEN_WIDTH*31/100, SCREEN_HEIGHT*57/100,
+                                  19*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
+                                  "Enter your username",&input_tex, &input_rec);
             }
         }
 
