@@ -63,8 +63,8 @@ void End(){
 
 }
 
-SDL_Color color(int r, int g, int b){
-    SDL_Color col = {r, g, b};
+SDL_Color color(int r, int g, int b, int a){
+    SDL_Color col = {r, g, b, a};
 
    return col;
 }
@@ -101,13 +101,13 @@ int main() {
     //credits
     SDL_Texture* logo_tex;
     SDL_Rect logo_rec;
-    get_text_and_rect(color(70, 255, 255), SCREEN_WIDTH*30/100, SCREEN_HEIGHT*78/100,
+    get_text_and_rect(color(70, 255, 255, 255), SCREEN_WIDTH*30/100, SCREEN_HEIGHT*78/100,
                       SCREEN_WIDTH*40/100, SCREEN_HEIGHT*5/100,"Developed by Nikan Vasei",
                       &logo_tex, &logo_rec);
     //logo
     SDL_Texture* name_tex;
     SDL_Rect name_rec;
-    get_text_and_rect(color(70, 255, 255), SCREEN_WIDTH*23/100, SCREEN_HEIGHT*13/100,
+    get_text_and_rect(color(70, 255, 255, 255), SCREEN_WIDTH*23/100, SCREEN_HEIGHT*13/100,
                       SCREEN_WIDTH*56/100, SCREEN_HEIGHT*20/100,"STATE.IO",
                       &name_tex, &name_rec);
 
@@ -116,59 +116,102 @@ int main() {
     memset(username, '\0', (int)sizeof(username)*sizeof(char));
     SDL_Texture* input_tex;
     SDL_Rect input_rec;
-    get_text_and_rect(color(255, 255, 255), SCREEN_WIDTH*31/100, SCREEN_HEIGHT*57/100,
+    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH*31/100, SCREEN_HEIGHT*57/100,
                       19*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
                       "Enter your username", &input_tex, &input_rec);
 
     bool render_text = false;
     SDL_StartTextInput();
 
+    //text box submit
+    SDL_Texture* submit_button;
+    SDL_Rect submit_button_rec;
+    get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*44/100, SCREEN_HEIGHT*67/100,
+                      6*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*4/100,
+                      "Submit", &submit_button, &submit_button_rec);
+
 
     SDL_bool shallExit = SDL_FALSE;
+    SDL_bool goto_main_menu = false;
     while (shallExit == SDL_FALSE) {
-        SDL_SetRenderDrawColor(sdlRenderer, 0x00, 0x00, 0x00, 0xff);
-        SDL_RenderClear(sdlRenderer);
-        SDL_RenderCopy(sdlRenderer, bg_tex, NULL, NULL);
-        SDL_RenderCopy(sdlRenderer, logo_tex, NULL, &logo_rec);
-        SDL_RenderCopy(sdlRenderer, name_tex, NULL, &name_rec);
-        SDL_RenderCopy(sdlRenderer, input_tex, NULL, &input_rec);
-        boxColor(sdlRenderer, SCREEN_WIDTH*27/100, SCREEN_HEIGHT*55/100,
-                 SCREEN_WIDTH*73/100, SCREEN_HEIGHT*55/100 + SCREEN_HEIGHT*1/100, 0xfff010ff);
-        boxColor(sdlRenderer, SCREEN_WIDTH*27/100, SCREEN_HEIGHT*64/100,
-                 SCREEN_WIDTH*73/100, SCREEN_HEIGHT*64/100 + SCREEN_HEIGHT*1/100, 0xfff010ff);
+        //starting game
+        if(!goto_main_menu) {
+            SDL_SetRenderDrawColor(sdlRenderer, 0x00, 0x00, 0x00, 0xff);
+            SDL_RenderClear(sdlRenderer);
+            SDL_RenderCopy(sdlRenderer, bg_tex, NULL, NULL);
+            SDL_RenderCopy(sdlRenderer, logo_tex, NULL, &logo_rec);
+            SDL_RenderCopy(sdlRenderer, name_tex, NULL, &name_rec);
+            SDL_RenderCopy(sdlRenderer, input_tex, NULL, &input_rec);
+            boxColor(sdlRenderer, SCREEN_WIDTH * 27 / 100, SCREEN_HEIGHT * 55 / 100,
+                     SCREEN_WIDTH * 73 / 100, SCREEN_HEIGHT * 56 / 100, 0xfff010ff);
+            boxColor(sdlRenderer, SCREEN_WIDTH * 27 / 100, SCREEN_HEIGHT * 64 / 100,
+                     SCREEN_WIDTH * 73 / 100, SCREEN_HEIGHT * 65 / 100, 0xfff010ff);
+            boxColor(sdlRenderer, SCREEN_WIDTH * 42 / 100, SCREEN_HEIGHT * 66 / 100,
+                     SCREEN_WIDTH * 58 / 100, SCREEN_HEIGHT * 72 / 100, 0xfff010ff);
+            SDL_RenderCopy(sdlRenderer, submit_button, NULL, &submit_button_rec);
 
 
-        SDL_Event Event;
-        while (SDL_PollEvent(&Event)) {
+            SDL_Event Event;
+            while (SDL_PollEvent(&Event)) {
 
-            if (Event.type == SDL_QUIT) {
-                shallExit = SDL_TRUE;
-                break;
-            }
-            else if(Event.type == SDL_KEYDOWN){
-                if( Event.key.keysym.sym == SDLK_BACKSPACE && strlen(username) > 0 ){
-                    memset(username+strlen(username)-1, '\0', sizeof(char));
+                if (Event.type == SDL_QUIT) {
+                    shallExit = SDL_TRUE;
+                    break;
+                }
+                else if (Event.type == SDL_KEYDOWN) {
+                    if (Event.key.keysym.sym == SDLK_BACKSPACE && strlen(username) > 0) {
+                        memset(username + strlen(username) - 1, '\0', sizeof(char));
+                        render_text = true;
+                    }
+                }
+                else if (Event.type == SDL_TEXTINPUT) {
+                    if (strlen(username) < 15) {
+                        memset(username + strlen(username), Event.text.text[0], sizeof(char));
+                    }
                     render_text = true;
                 }
-            }
-            else if(Event.type == SDL_TEXTINPUT){
-                if(strlen(username) < 15) {
-                    memset(username + strlen(username), Event.text.text[0], sizeof(char));
+                else if (Event.type == SDL_MOUSEBUTTONUP) {
+                    if (Event.button.x >= SCREEN_WIDTH * 42 / 100 && Event.button.x <= SCREEN_WIDTH * 58 / 100 &&
+                        Event.button.y >= SCREEN_HEIGHT * 66 / 100 && Event.button.y <= SCREEN_HEIGHT * 72 / 100) {
+                        //go to main menu
+                        goto_main_menu = true;
+                        SDL_StopTextInput();
+                        SDL_DestroyTexture(bg_tex);
+                        SDL_DestroyTexture(logo_tex);
+                        SDL_DestroyTexture(input_tex);
+                    }
+
                 }
-                render_text = true;
+
+            }
+            if (render_text) {
+                if (strlen(username) > 0) {
+                    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH * 35 / 100, SCREEN_HEIGHT * 57 / 100,
+                                      (int) strlen(username) * SCREEN_WIDTH * 2 / 100, SCREEN_HEIGHT * 5 / 100,
+                                      username, &input_tex, &input_rec);
+                }
+                else {
+                    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH * 31 / 100, SCREEN_HEIGHT * 57 / 100,
+                                      19 * SCREEN_WIDTH * 2 / 100, SCREEN_HEIGHT * 5 / 100,
+                                      "Enter your username", &input_tex, &input_rec);
+                }
             }
 
+
         }
-        if(render_text){
-            if(strlen(username) > 0){
-                get_text_and_rect(color(255, 255, 255), SCREEN_WIDTH*35/100, SCREEN_HEIGHT*57/100,
-                                  (int)strlen(username)*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
-                                  username, &input_tex, &input_rec);
-            }
-            else{
-                get_text_and_rect(color(255, 255, 255), SCREEN_WIDTH*31/100, SCREEN_HEIGHT*57/100,
-                                  19*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
-                                  "Enter your username",&input_tex, &input_rec);
+        //main menu
+        else if(goto_main_menu){
+            SDL_SetRenderDrawColor(sdlRenderer, 0x00, 0x00, 0x00, 0xff);
+            SDL_RenderClear(sdlRenderer);
+
+
+            SDL_Event e;
+            while(SDL_PollEvent(&e)){
+                if (e.type == SDL_QUIT) {
+                    shallExit = SDL_TRUE;
+                    break;
+                }
+
             }
         }
 
@@ -177,10 +220,6 @@ int main() {
         SDL_Delay(1000 / FPS);
     }
 
-    SDL_StopTextInput();
-    SDL_DestroyTexture(bg_tex);
-    SDL_DestroyTexture(logo_tex);
-    SDL_DestroyTexture(input_tex);
 
     End();
 
