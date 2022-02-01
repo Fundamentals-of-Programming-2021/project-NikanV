@@ -12,6 +12,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 
 const int FPS = 60;
@@ -142,9 +143,6 @@ int main() {
     SDL_Rect leaderboard_rec;
     SDL_Rect back_rec;
 
-    char* greeting = (char*)malloc(sizeof(char)*30);
-
-
     SDL_Texture* ingame_name;
     SDL_Rect ingame_name_rec;
 
@@ -165,12 +163,13 @@ int main() {
 
 
 
-
     SDL_bool shallExit = SDL_FALSE;
+    SDL_bool goto_start = true;
     SDL_bool goto_main_menu = false;
+    SDL_bool goto_new_game = false;
     while (shallExit == SDL_FALSE) {
         //starting game
-        if(!goto_main_menu) {
+        if(goto_start) {
             SDL_SetRenderDrawColor(sdlRenderer, 0x00, 0x00, 0x00, 0xff);
             SDL_RenderClear(sdlRenderer);
             SDL_RenderCopy(sdlRenderer, start_bg_tex, NULL, NULL);
@@ -210,10 +209,10 @@ int main() {
                         Event.button.y >= SCREEN_HEIGHT * 66 / 100 && Event.button.y <= SCREEN_HEIGHT * 72 / 100) {
                         //go to main menu
                         goto_main_menu = true;
-                        strcpy(greeting, username);
+                        goto_start = false;
                         get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH*21/100,
-                                          SCREEN_HEIGHT*12/100,strlen(greeting)*SCREEN_WIDTH*2/100,
-                                          SCREEN_HEIGHT*5/100,greeting , &ingame_name,
+                                          SCREEN_HEIGHT*12/100,strlen(username)*SCREEN_WIDTH*2/100,
+                                          SCREEN_HEIGHT*5/100,username , &ingame_name,
                                           &ingame_name_rec);
                     }
 
@@ -237,9 +236,7 @@ int main() {
 
         //main menu
         if(goto_main_menu){
-            //destroying previous ones
 
-            //new part
             SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0xff, 0xff);
             SDL_RenderClear(sdlRenderer);
             SDL_RenderCopy(sdlRenderer, main_menu_bg_tex, NULL, NULL);
@@ -272,10 +269,13 @@ int main() {
                        e.button.y >= SCREEN_HEIGHT*70/100 && e.button.y <= SCREEN_HEIGHT*80/100){
                         //back to start
                         goto_main_menu = false;
+                        goto_start = true;
                     }
                     else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
                             e.button.y >= SCREEN_HEIGHT*25/100 && e.button.y <= SCREEN_HEIGHT*35/100){
                         //new_game
+                        goto_new_game = true;
+                        goto_main_menu = false;
                     }
                     else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
                             e.button.y >= SCREEN_HEIGHT*40/100 && e.button.y <= SCREEN_HEIGHT*50/100){
@@ -291,14 +291,78 @@ int main() {
 
         }
 
+        //goto new_game
+        if(goto_new_game){
+            SDL_SetRenderDrawColor(sdlRenderer, 0xa5, 0xa5, 0xa5, 0xff);
+            SDL_RenderClear(sdlRenderer);
+            Sint16 x[6]; Sint16 y[6];
+            int flag = 0;
+            for(int i = 0; i < 27;i++) {
+                for(int j = 0; j < 19;j++) {
+                    if(i%2 == 0) {
+                        x[0] = i * SCREEN_WIDTH / 20 - flag;
+                        x[1] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
+                        x[2] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
+                        x[3] = i * SCREEN_WIDTH / 20 + SCREEN_WIDTH / 20 - flag;
+                        x[4] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
+                        x[5] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
+                        y[0] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
+                        y[1] = j * SCREEN_HEIGHT / 20;
+                        y[2] = j * SCREEN_HEIGHT / 20;
+                        y[3] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
+                        y[4] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
+                        y[5] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
+                        filledPolygonColor(sdlRenderer, x, y, 6, 0xffffffff);
+                    }
+                    else {
+                        x[0] = i * SCREEN_WIDTH / 20 - flag;
+                        x[1] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
+                        x[2] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
+                        x[3] = i * SCREEN_WIDTH / 20 + SCREEN_WIDTH / 20 - flag;
+                        x[4] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
+                        x[5] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
+                        y[0] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
+                        y[1] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
+                        y[2] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
+                        y[3] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
+                        y[4] = j * SCREEN_HEIGHT / 20 + 150 * SCREEN_HEIGHT / 2000;
+                        y[5] = j * SCREEN_HEIGHT / 20 + 150 * SCREEN_HEIGHT / 2000;
+                        filledPolygonColor(sdlRenderer, x, y, 6, 0xff000000);
+                    }
+                }
+                flag += 29 * SCREEN_WIDTH / 2000;
+            }
+
+
+            SDL_Event e;
+            while(SDL_PollEvent(&e)) {
+                if (e.type == SDL_QUIT) {
+                    shallExit = SDL_TRUE;
+                    break;
+                }
+
+            }
+
+        }
+
+
+
+
         SDL_RenderPresent(sdlRenderer);
         SDL_Delay(1000 / FPS);
     }
 
     SDL_StopTextInput();
     SDL_DestroyTexture(start_bg_tex);
+    SDL_DestroyTexture(main_menu_bg_tex);
     SDL_DestroyTexture(logo_tex);
+    SDL_DestroyTexture(name_tex);
+    SDL_DestroyTexture(submit_button);
     SDL_DestroyTexture(input_tex);
+    SDL_DestroyTexture(new_game);
+    SDL_DestroyTexture(con_game);
+    SDL_DestroyTexture(leaderboard);
+    SDL_DestroyTexture(back);
 
     End();
 
