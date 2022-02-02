@@ -1,7 +1,3 @@
-#include <SDL.h>
-#include <SDL2_gfxPrimitives.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
 
 #include "variables.h"
 #include "functions.h"
@@ -9,45 +5,6 @@
 #ifdef main
 #undef main
 #endif
-
-#include <stdio.h>
-#include <string.h>
-#include <malloc.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
-
-
-void Init(){
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
-        printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-    }
-    TTF_Init();
-}
-
-void Begin(){
-    sdlWindow = SDL_CreateWindow("Test_Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                 SCREEN_WIDTH,SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
-    sdlRenderer = SDL_CreateRenderer(sdlWindow, -1,
-                                     SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-
-    xeros = TTF_OpenFont("../fonts/xeros_theorem.ttf", 24);
-
-}
-
-void End(){
-    SDL_DestroyRenderer(sdlRenderer);
-    SDL_DestroyWindow(sdlWindow);
-    TTF_CloseFont(xeros);
-    SDL_Quit();
-
-}
-
-SDL_Color color(int r, int g, int b, int a){
-    SDL_Color col = {r, g, b, a};
-
-   return col;
-}
 
 
 int main() {

@@ -3,9 +3,7 @@
 
 #endif //FOP_PROJECT_VARIABLES_H
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_image.h>
+#include "functions.h"
 
 extern const int FPS;
 
