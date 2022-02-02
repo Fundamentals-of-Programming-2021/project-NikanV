@@ -27,7 +27,14 @@ void get_img_and_rect(char* path, SDL_Texture** texture);
 SDL_Color color(int r, int g, int b, int a);
 
 void xy_maker(int l, int ran, Sint16 x[30][6], Sint16 y[30][6],
-              Sint16 mid_x, Sint16 mid_y, Sint16 mid_xs[30], Sint16 mid_ys[30]);
+              Sint16 mid_x, Sint16 mid_y, Sint16 mid_xs[30], Sint16 mid_ys[30], Sint16 lower, Sint16 upper);
 
 void draw_map(Sint16 nx[6], Sint16 ny[6], Sint16 x[30][6], Sint16 y[30][6]);
 
+void draw_start(SDL_Texture* start_bg_tex, SDL_Texture* logo_tex, SDL_Texture* name_tex, SDL_Texture* input_tex,
+                SDL_Texture* submit_button, SDL_Rect logo_rec, SDL_Rect name_rec, SDL_Rect input_rec,
+                SDL_Rect submit_button_rec);
+
+void draw_main_menu(SDL_Texture* main_menu_bg_tex, SDL_Texture* new_game, SDL_Texture* con_game,
+                    SDL_Texture* leaderboard, SDL_Texture* back, SDL_Texture* ingame_name, SDL_Rect new_game_rec,
+                    SDL_Rect con_game_rec, SDL_Rect leaderboard_rec, SDL_Rect back_rec, SDL_Rect ingame_name_rec);

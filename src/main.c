@@ -78,9 +78,10 @@ int main() {
                       "Back", &back, &back_rec);
 
     //new_game
-    while(max_shapes < 30){
+    while(max_shapes < 20){
         max_shapes = 0;
-        xy_maker(100, rand(), x, y, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, mid_xs, mid_ys);
+        xy_maker(130, rand(), x, y, 3*SCREEN_WIDTH/10, SCREEN_HEIGHT/2, mid_xs, mid_ys,
+                 130, 3*SCREEN_WIDTH/5 - 70);
     }
 
 
@@ -92,22 +93,13 @@ int main() {
         if(goto_start) {
             SDL_SetRenderDrawColor(sdlRenderer, 0x00, 0x00, 0x00, 0xff);
             SDL_RenderClear(sdlRenderer);
-            SDL_RenderCopy(sdlRenderer, start_bg_tex, NULL, NULL);
-            SDL_RenderCopy(sdlRenderer, logo_tex, NULL, &logo_rec);
-            SDL_RenderCopy(sdlRenderer, name_tex, NULL, &name_rec);
-            SDL_RenderCopy(sdlRenderer, input_tex, NULL, &input_rec);
-            boxColor(sdlRenderer, SCREEN_WIDTH * 27 / 100, SCREEN_HEIGHT * 55 / 100,
-                     SCREEN_WIDTH * 73 / 100, SCREEN_HEIGHT * 56 / 100, 0xfff010ff);
-            boxColor(sdlRenderer, SCREEN_WIDTH * 27 / 100, SCREEN_HEIGHT * 64 / 100,
-                     SCREEN_WIDTH * 73 / 100, SCREEN_HEIGHT * 65 / 100, 0xfff010ff);
-            boxColor(sdlRenderer, SCREEN_WIDTH * 42 / 100, SCREEN_HEIGHT * 66 / 100,
-                     SCREEN_WIDTH * 58 / 100, SCREEN_HEIGHT * 72 / 100, 0xfff010ff);
-            SDL_RenderCopy(sdlRenderer, submit_button, NULL, &submit_button_rec);
+
+            draw_start(start_bg_tex, logo_tex, name_tex, input_tex, submit_button, logo_rec,
+                       name_rec, input_rec, submit_button_rec);
 
 
             SDL_Event e;
             while (SDL_PollEvent(&e)) {
-
                 switch(e.type) {
                     case SDL_QUIT:
                         shallExit = SDL_TRUE;
@@ -163,20 +155,9 @@ int main() {
 
             SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0xff, 0xff);
             SDL_RenderClear(sdlRenderer);
-            SDL_RenderCopy(sdlRenderer, main_menu_bg_tex, NULL, NULL);
-            boxColor(sdlRenderer, SCREEN_WIDTH*30/100, SCREEN_HEIGHT*25/100,
-                     SCREEN_WIDTH*70/100, SCREEN_HEIGHT*35/100, 0xffffff44);
-            boxColor(sdlRenderer, SCREEN_WIDTH*30/100, SCREEN_HEIGHT*40/100,
-                     SCREEN_WIDTH*70/100, SCREEN_HEIGHT*50/100, 0xffffff44);
-            boxColor(sdlRenderer, SCREEN_WIDTH*25/100, SCREEN_HEIGHT*55/100,
-                     SCREEN_WIDTH*75/100, SCREEN_HEIGHT*65/100, 0xffffff44);
-            boxColor(sdlRenderer, SCREEN_WIDTH*40/100, SCREEN_HEIGHT*70/100,
-                     SCREEN_WIDTH*60/100, SCREEN_HEIGHT*80/100, 0xffffff44);
-            SDL_RenderCopy(sdlRenderer, new_game, NULL, &new_game_rec);
-            SDL_RenderCopy(sdlRenderer, con_game, NULL, &con_game_rec);
-            SDL_RenderCopy(sdlRenderer, leaderboard, NULL, &leaderboard_rec);
-            SDL_RenderCopy(sdlRenderer, back, NULL, &back_rec);
-            SDL_RenderCopy(sdlRenderer, ingame_name, NULL, &ingame_name_rec);
+
+            draw_main_menu(main_menu_bg_tex, new_game, con_game, leaderboard, back, ingame_name, new_game_rec,
+                           con_game_rec, leaderboard_rec, back_rec, ingame_name_rec);
 
 
             SDL_Event e;
