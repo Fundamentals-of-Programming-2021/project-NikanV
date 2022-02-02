@@ -42,7 +42,6 @@ int main() {
                       19*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
                       "Enter your username", &input_tex, &input_rec);
     bool render_text = false;
-    SDL_StartTextInput();
 
     //text box submit
     SDL_Texture* submit_button;
@@ -79,26 +78,15 @@ int main() {
                       "Back", &back, &back_rec);
 
     //new_game
-    srand(time(NULL));
-    int ran_x = rand()%27, ran_y = rand()%19;
-    int ran_x2 = rand()%27, ran_y2 = rand()%19;
-    if(ran_x > ran_x2){
-        int temp = ran_x;
-        ran_x = ran_x2;
-        ran_x2 = ran_x;
-    }
-    if(ran_y > ran_y2){
-        int temp = ran_y;
-        ran_y = ran_y2;
-        ran_y2 = ran_y;
+    while(max_shapes < 30){
+        max_shapes = 0;
+        xy_maker(100, rand(), x, y, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, mid_xs, mid_ys);
     }
 
 
 
-    SDL_bool shallExit = SDL_FALSE;
-    SDL_bool goto_start = true;
-    SDL_bool goto_main_menu = false;
-    SDL_bool goto_new_game = false;
+
+
     while (shallExit == SDL_FALSE) {
         //starting game
         if(goto_start) {
@@ -117,48 +105,52 @@ int main() {
             SDL_RenderCopy(sdlRenderer, submit_button, NULL, &submit_button_rec);
 
 
-            SDL_Event Event;
-            while (SDL_PollEvent(&Event)) {
+            SDL_Event e;
+            while (SDL_PollEvent(&e)) {
 
-                if (Event.type == SDL_QUIT) {
-                    shallExit = SDL_TRUE;
-                    break;
-                }
-                else if (Event.type == SDL_KEYDOWN) {
-                    if (Event.key.keysym.sym == SDLK_BACKSPACE && strlen(username) > 0) {
-                        memset(username + strlen(username) - 1, '\0', sizeof(char));
+                switch(e.type) {
+                    case SDL_QUIT:
+                        shallExit = SDL_TRUE;
+                        break;
+                    case SDL_KEYDOWN:
+                        if (e.key.keysym.sym == SDLK_BACKSPACE && strlen(username) > 0) {
+                            memset(username + strlen(username) - 1, '\0', sizeof(char));
+                            render_text = true;
+                        }
+                        break;
+                    case SDL_TEXTINPUT:
+                        if (strlen(username) < 15) {
+                            memset(username + strlen(username), e.text.text[0], sizeof(char));
+                        }
                         render_text = true;
-                    }
+                        break;
+                    case SDL_MOUSEBUTTONUP:
+                        if (e.button.x >= SCREEN_WIDTH * 42 / 100 && e.button.x <= SCREEN_WIDTH * 58 / 100 &&
+                            e.button.y >= SCREEN_HEIGHT * 66 / 100 && e.button.y <= SCREEN_HEIGHT * 72 / 100) {
+                            //go to main menu
+                            goto_main_menu = true;
+                            goto_start = false;
+                            get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH*21/100,
+                                              SCREEN_HEIGHT*12/100,strlen(username)*SCREEN_WIDTH*2/100,
+                                              SCREEN_HEIGHT*5/100,username , &ingame_name,
+                                              &ingame_name_rec);
+                        }
+                        break;
+                    default:
+                        break;
                 }
-                else if (Event.type == SDL_TEXTINPUT) {
-                    if (strlen(username) < 15) {
-                        memset(username + strlen(username), Event.text.text[0], sizeof(char));
-                    }
-                    render_text = true;
-                }
-                else if (Event.type == SDL_MOUSEBUTTONUP) {
-                    if (Event.button.x >= SCREEN_WIDTH * 42 / 100 && Event.button.x <= SCREEN_WIDTH * 58 / 100 &&
-                        Event.button.y >= SCREEN_HEIGHT * 66 / 100 && Event.button.y <= SCREEN_HEIGHT * 72 / 100) {
-                        //go to main menu
-                        goto_main_menu = true;
-                        goto_start = false;
-                        get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH*21/100,
-                                          SCREEN_HEIGHT*12/100,strlen(username)*SCREEN_WIDTH*2/100,
-                                          SCREEN_HEIGHT*5/100,username , &ingame_name,
-                                          &ingame_name_rec);
-                    }
-
-                }
-
             }
             if (render_text) {
                 if (strlen(username) > 0) {
-                    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH * 35 / 100, SCREEN_HEIGHT * 57 / 100,
-                                      (int) strlen(username) * SCREEN_WIDTH * 2 / 100, SCREEN_HEIGHT * 5 / 100,
+                    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH * 35 / 100,
+                                      SCREEN_HEIGHT * 57 / 100,
+                                      (int) strlen(username) * SCREEN_WIDTH * 2 / 100,
+                                      SCREEN_HEIGHT * 5 / 100,
                                       username, &input_tex, &input_rec);
                 }
                 else {
-                    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH * 31 / 100, SCREEN_HEIGHT * 57 / 100,
+                    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH * 31 / 100,
+                                      SCREEN_HEIGHT * 57 / 100,
                                       19 * SCREEN_WIDTH * 2 / 100, SCREEN_HEIGHT * 5 / 100,
                                       "Enter your username", &input_tex, &input_rec);
                 }
@@ -187,36 +179,36 @@ int main() {
             SDL_RenderCopy(sdlRenderer, ingame_name, NULL, &ingame_name_rec);
 
 
-
-
-
             SDL_Event e;
             while(SDL_PollEvent(&e)){
-                if (e.type == SDL_QUIT) {
-                    shallExit = SDL_TRUE;
-                    break;
-                }
-                else if(e.type == SDL_MOUSEBUTTONUP){
-                    if(e.button.x >= SCREEN_WIDTH*40/100 && e.button.x <= SCREEN_WIDTH*60/100 &&
-                       e.button.y >= SCREEN_HEIGHT*70/100 && e.button.y <= SCREEN_HEIGHT*80/100){
-                        //back to start
-                        goto_main_menu = false;
-                        goto_start = true;
-                    }
-                    else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
-                            e.button.y >= SCREEN_HEIGHT*25/100 && e.button.y <= SCREEN_HEIGHT*35/100){
-                        //new_game
-                        goto_new_game = true;
-                        goto_main_menu = false;
-                    }
-                    else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
-                            e.button.y >= SCREEN_HEIGHT*40/100 && e.button.y <= SCREEN_HEIGHT*50/100){
-                        //continue
-                    }
-                    else if(e.button.x >= SCREEN_WIDTH*25/100 && e.button.x <= SCREEN_WIDTH*75/100 &&
-                            e.button.y >= SCREEN_HEIGHT*55/100 && e.button.y <= SCREEN_HEIGHT*65/100){
-                        //leaderboards
-                    }
+                switch (e.type) {
+                    case SDL_QUIT:
+                        shallExit = SDL_TRUE;
+                        break;
+                    case SDL_MOUSEBUTTONUP:
+                        if(e.button.x >= SCREEN_WIDTH*40/100 && e.button.x <= SCREEN_WIDTH*60/100 &&
+                           e.button.y >= SCREEN_HEIGHT*70/100 && e.button.y <= SCREEN_HEIGHT*80/100){
+                            //back to start
+                            goto_main_menu = false;
+                            goto_start = true;
+                        }
+                        else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
+                                e.button.y >= SCREEN_HEIGHT*25/100 && e.button.y <= SCREEN_HEIGHT*35/100){
+                            //new_game
+                            goto_new_game = true;
+                            goto_main_menu = false;
+                        }
+                        else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
+                                e.button.y >= SCREEN_HEIGHT*40/100 && e.button.y <= SCREEN_HEIGHT*50/100){
+                            //continue
+                        }
+                        else if(e.button.x >= SCREEN_WIDTH*25/100 && e.button.x <= SCREEN_WIDTH*75/100 &&
+                                e.button.y >= SCREEN_HEIGHT*55/100 && e.button.y <= SCREEN_HEIGHT*65/100){
+                            //leaderboards
+                        }
+                        break;
+                    default:
+                        break;
                 }
 
             }
@@ -227,47 +219,9 @@ int main() {
         if(goto_new_game){
             SDL_SetRenderDrawColor(sdlRenderer, 0xa5, 0xa5, 0xa5, 0xff);
             SDL_RenderClear(sdlRenderer);
-            Sint16 x[6]; Sint16 y[6];
-            int flag = 0;
-            for(int i = 0; i < 27;i++) {
-                for(int j = 0; j < 19;j++) {
-                    x[0] = i * SCREEN_WIDTH / 20 - flag;
-                    x[1] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
-                    x[2] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
-                    x[3] = i * SCREEN_WIDTH / 20 + SCREEN_WIDTH / 20 - flag;
-                    x[4] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
-                    x[5] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
-                    if(i%2 == 0) {
-                        y[0] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
-                        y[1] = j * SCREEN_HEIGHT / 20;
-                        y[2] = j * SCREEN_HEIGHT / 20;
-                        y[3] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
-                        y[4] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
-                        y[5] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
-                        if(i >= ran_x && i <= ran_x2 && j >= ran_y && j <= ran_y2){
-                            filledPolygonColor(sdlRenderer, x, y, 6, 0xff0000ff);
-                        }
-                        else {
-                            filledPolygonColor(sdlRenderer, x, y, 6, 0xffffffff);
-                        }
-                    }
-                    else {
-                        y[0] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
-                        y[1] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
-                        y[2] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
-                        y[3] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
-                        y[4] = j * SCREEN_HEIGHT / 20 + 150 * SCREEN_HEIGHT / 2000;
-                        y[5] = j * SCREEN_HEIGHT / 20 + 150 * SCREEN_HEIGHT / 2000;
-                        if(i >= ran_x && i <= ran_x2 && j >= ran_y && j <= ran_y2){
-                            filledPolygonColor(sdlRenderer, x, y, 6, 0xff0000ff);
-                        }
-                        else {
-                            filledPolygonColor(sdlRenderer, x, y, 6, 0xff000000);
-                        }
-                    }
-                }
-                flag += 29 * SCREEN_WIDTH / 2000;
-            }
+
+            draw_map(nx, ny, x, y);
+
 
 
             SDL_Event e;
@@ -288,12 +242,13 @@ int main() {
         SDL_Delay(1000 / FPS);
     }
 
-    SDL_StopTextInput();
+
     SDL_DestroyTexture(start_bg_tex);
     SDL_DestroyTexture(main_menu_bg_tex);
     SDL_DestroyTexture(logo_tex);
     SDL_DestroyTexture(name_tex);
     SDL_DestroyTexture(submit_button);
+    SDL_DestroyTexture(ingame_name);
     SDL_DestroyTexture(input_tex);
     SDL_DestroyTexture(new_game);
     SDL_DestroyTexture(con_game);

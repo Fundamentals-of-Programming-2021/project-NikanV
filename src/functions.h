@@ -26,3 +26,8 @@ void get_img_and_rect(char* path, SDL_Texture** texture);
 
 SDL_Color color(int r, int g, int b, int a);
 
+void xy_maker(int l, int ran, Sint16 x[30][6], Sint16 y[30][6],
+              Sint16 mid_x, Sint16 mid_y, Sint16 mid_xs[30], Sint16 mid_ys[30]);
+
+void draw_map(Sint16 nx[6], Sint16 ny[6], Sint16 x[30][6], Sint16 y[30][6]);
+

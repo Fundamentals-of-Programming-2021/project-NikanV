@@ -15,3 +15,13 @@ extern SDL_Renderer *sdlRenderer;
 
 extern TTF_Font* xeros;
 extern char* username;
+
+extern SDL_bool shallExit;
+extern SDL_bool goto_start;
+extern SDL_bool goto_main_menu;
+extern SDL_bool goto_new_game;
+
+extern Sint16 mid_xs[30]; extern Sint16 mid_ys[30];
+extern Sint16 x[30][6]; extern Sint16 y[30][6];
+extern Sint16 nx[6]; extern Sint16 ny[6];
+extern Sint16 max_shapes;
