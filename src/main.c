@@ -3,6 +3,9 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
+#include "variables.h"
+#include "functions.h"
+
 #ifdef main
 #undef main
 #endif
@@ -13,30 +16,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-
-
-const int FPS = 60;
-
-const int SCREEN_WIDTH = 1920;
-const int SCREEN_HEIGHT = 1440;
-
-SDL_Window *sdlWindow;
-SDL_Renderer *sdlRenderer;
-
-TTF_Font* xeros;
-char* username;
-
-int min(int a, int b) {
-    return a < b ? a : b;
-}
-
-int max(int a, int b) {
-    return a > b ? a : b;
-}
-
-int mod(int a, int b) {
-    return ((a % b) + b) % b;
-}
 
 
 void Init(){
@@ -69,22 +48,6 @@ SDL_Color color(int r, int g, int b, int a){
 
    return col;
 }
-void get_text_and_rect(SDL_Color color, int x, int y, int w, int h, char *text,
-                       SDL_Texture** texture, SDL_Rect* rect) {
-    SDL_Surface *surface;
-
-    surface = TTF_RenderText_Solid(xeros, text, color);
-    *texture = SDL_CreateTextureFromSurface(sdlRenderer, surface);
-    SDL_FreeSurface(surface);
-    rect->x = x; rect->y = y; rect->w = w; rect->h = h;
-}
-
-void get_img_and_rect(char* path, SDL_Texture** texture){
-    SDL_Surface* surface = IMG_Load(path);
-    *texture = SDL_CreateTextureFromSurface(sdlRenderer, surface);
-    SDL_FreeSurface(surface);
-}
-
 
 
 int main() {
@@ -100,7 +63,6 @@ int main() {
     SDL_Texture* main_menu_bg_tex;
     get_img_and_rect("../start.jpg", &main_menu_bg_tex);
 
-    //strings
     //credits
     SDL_Texture* logo_tex;
     SDL_Rect logo_rec;
@@ -159,7 +121,20 @@ int main() {
                       4*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
                       "Back", &back, &back_rec);
 
-
+    //new_game
+    srand(time(NULL));
+    int ran_x = rand()%27, ran_y = rand()%19;
+    int ran_x2 = rand()%27, ran_y2 = rand()%19;
+    if(ran_x > ran_x2){
+        int temp = ran_x;
+        ran_x = ran_x2;
+        ran_x2 = ran_x;
+    }
+    if(ran_y > ran_y2){
+        int temp = ran_y;
+        ran_y = ran_y2;
+        ran_y2 = ran_y;
+    }
 
 
 
@@ -299,35 +274,39 @@ int main() {
             int flag = 0;
             for(int i = 0; i < 27;i++) {
                 for(int j = 0; j < 19;j++) {
+                    x[0] = i * SCREEN_WIDTH / 20 - flag;
+                    x[1] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
+                    x[2] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
+                    x[3] = i * SCREEN_WIDTH / 20 + SCREEN_WIDTH / 20 - flag;
+                    x[4] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
+                    x[5] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
                     if(i%2 == 0) {
-                        x[0] = i * SCREEN_WIDTH / 20 - flag;
-                        x[1] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
-                        x[2] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
-                        x[3] = i * SCREEN_WIDTH / 20 + SCREEN_WIDTH / 20 - flag;
-                        x[4] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
-                        x[5] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
                         y[0] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
                         y[1] = j * SCREEN_HEIGHT / 20;
                         y[2] = j * SCREEN_HEIGHT / 20;
                         y[3] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
                         y[4] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
                         y[5] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
-                        filledPolygonColor(sdlRenderer, x, y, 6, 0xffffffff);
+                        if(i >= ran_x && i <= ran_x2 && j >= ran_y && j <= ran_y2){
+                            filledPolygonColor(sdlRenderer, x, y, 6, 0xff0000ff);
+                        }
+                        else {
+                            filledPolygonColor(sdlRenderer, x, y, 6, 0xffffffff);
+                        }
                     }
                     else {
-                        x[0] = i * SCREEN_WIDTH / 20 - flag;
-                        x[1] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
-                        x[2] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
-                        x[3] = i * SCREEN_WIDTH / 20 + SCREEN_WIDTH / 20 - flag;
-                        x[4] = i * SCREEN_WIDTH / 20 + 70 * SCREEN_WIDTH / 2000 - flag;
-                        x[5] = i * SCREEN_WIDTH / 20 + 29 * SCREEN_WIDTH / 2000 - flag;
                         y[0] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
                         y[1] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
                         y[2] = j * SCREEN_HEIGHT / 20 + 50 * SCREEN_HEIGHT / 2000;
                         y[3] = j * SCREEN_HEIGHT / 20 + SCREEN_HEIGHT / 20;
                         y[4] = j * SCREEN_HEIGHT / 20 + 150 * SCREEN_HEIGHT / 2000;
                         y[5] = j * SCREEN_HEIGHT / 20 + 150 * SCREEN_HEIGHT / 2000;
-                        filledPolygonColor(sdlRenderer, x, y, 6, 0xff000000);
+                        if(i >= ran_x && i <= ran_x2 && j >= ran_y && j <= ran_y2){
+                            filledPolygonColor(sdlRenderer, x, y, 6, 0xff0000ff);
+                        }
+                        else {
+                            filledPolygonColor(sdlRenderer, x, y, 6, 0xff000000);
+                        }
                     }
                 }
                 flag += 29 * SCREEN_WIDTH / 2000;

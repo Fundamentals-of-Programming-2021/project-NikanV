@@ -67,8 +67,22 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 
 build cmake_object_order_depends_target_Fop_project: phony || CMakeFiles/Fop_project.dir
 
+build CMakeFiles/Fop_project.dir/src/functions.c.o: C_COMPILER__Fop_project_ /home/nikan/Desktop/Fop_project/src/functions.c || cmake_object_order_depends_target_Fop_project
+  DEP_FILE = CMakeFiles/Fop_project.dir/src/functions.c.o.d
+  FLAGS = -std=gnu99
+  INCLUDES = -I/usr/include/SDL2
+  OBJECT_DIR = CMakeFiles/Fop_project.dir
+  OBJECT_FILE_DIR = CMakeFiles/Fop_project.dir/src
+
 build CMakeFiles/Fop_project.dir/src/main.c.o: C_COMPILER__Fop_project_ /home/nikan/Desktop/Fop_project/src/main.c || cmake_object_order_depends_target_Fop_project
   DEP_FILE = CMakeFiles/Fop_project.dir/src/main.c.o.d
+  FLAGS = -std=gnu99
+  INCLUDES = -I/usr/include/SDL2
+  OBJECT_DIR = CMakeFiles/Fop_project.dir
+  OBJECT_FILE_DIR = CMakeFiles/Fop_project.dir/src
+
+build CMakeFiles/Fop_project.dir/src/variables.c.o: C_COMPILER__Fop_project_ /home/nikan/Desktop/Fop_project/src/variables.c || cmake_object_order_depends_target_Fop_project
+  DEP_FILE = CMakeFiles/Fop_project.dir/src/variables.c.o.d
   FLAGS = -std=gnu99
   INCLUDES = -I/usr/include/SDL2
   OBJECT_DIR = CMakeFiles/Fop_project.dir
@@ -82,7 +96,7 @@ build CMakeFiles/Fop_project.dir/src/main.c.o: C_COMPILER__Fop_project_ /home/ni
 #############################################
 # Link the executable Fop_project
 
-build Fop_project: C_EXECUTABLE_LINKER__Fop_project_ CMakeFiles/Fop_project.dir/src/main.c.o
+build Fop_project: C_EXECUTABLE_LINKER__Fop_project_ CMakeFiles/Fop_project.dir/src/functions.c.o CMakeFiles/Fop_project.dir/src/main.c.o CMakeFiles/Fop_project.dir/src/variables.c.o
   LINK_LIBRARIES = -lm  -lSDL2  -lSDL2_gfx  -lSDL2_image  -lSDL2_ttf
   OBJECT_DIR = CMakeFiles/Fop_project.dir
   POST_BUILD = :
