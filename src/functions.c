@@ -196,7 +196,7 @@ void xy_maker(int l, int ran, Sint16 x[30][6], Sint16 y[30][6],
     }
 }
 
-void draw_map(Sint16 nx[6], Sint16 ny[6], Sint16 x[30][6], Sint16 y[30][6]){
+void draw_map(Sint16 nx[6], Sint16 ny[6], Sint16 x[30][6], Sint16 y[30][6], int blue, int red, int green){
     for(int i = 0;i < 30;i++){
         for(int j = 0; j < 6;j++){
             nx[j] = x[i][j];
@@ -205,6 +205,24 @@ void draw_map(Sint16 nx[6], Sint16 ny[6], Sint16 x[30][6], Sint16 y[30][6]){
         filledPolygonColor(sdlRenderer, nx, ny, 6, 0xffffffff);
         polygonColor(sdlRenderer, nx, ny, 6, 0xff000000);
     }
+    for(int j = 0; j < 6;j++){
+        nx[j] = x[blue][j];
+        ny[j] = y[blue][j];
+    }
+    filledPolygonColor(sdlRenderer, nx, ny, 6, 0xff0000ff);
+    polygonColor(sdlRenderer, nx, ny, 6, 0xff000000);
+    for(int j = 0; j < 6;j++){
+        nx[j] = x[red][j];
+        ny[j] = y[red][j];
+    }
+    filledPolygonColor(sdlRenderer, nx, ny, 6, 0xffff0000);
+    polygonColor(sdlRenderer, nx, ny, 6, 0xff000000);
+    for(int j = 0; j < 6;j++){
+        nx[j] = x[green][j];
+        ny[j] = y[green][j];
+    }
+    filledPolygonColor(sdlRenderer, nx, ny, 6, 0xff00ff00);
+    polygonColor(sdlRenderer, nx, ny, 6, 0xff000000);
 }
 
 void draw_start(SDL_Texture* start_bg_tex, SDL_Texture* logo_tex, SDL_Texture* name_tex, SDL_Texture* input_tex,

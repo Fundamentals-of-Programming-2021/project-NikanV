@@ -83,7 +83,12 @@ int main() {
         xy_maker(130, rand(), x, y, 3*SCREEN_WIDTH/10, SCREEN_HEIGHT/2, mid_xs, mid_ys,
                  130, 3*SCREEN_WIDTH/5 - 70);
     }
-
+    int blue = rand()%max_shapes, red = rand()%max_shapes, green = rand()%max_shapes;
+    while(1) {
+        if (red == blue) {red = rand()%max_shapes;}
+        if(green == red || green == blue){green = rand()%max_shapes;}
+        if(red != blue && red != green && blue != green){break;}
+    }
 
 
 
@@ -201,7 +206,7 @@ int main() {
             SDL_SetRenderDrawColor(sdlRenderer, 0xa5, 0xa5, 0xa5, 0xff);
             SDL_RenderClear(sdlRenderer);
 
-            draw_map(nx, ny, x, y);
+            draw_map(nx, ny, x, y, blue, red, green);
 
 
 
