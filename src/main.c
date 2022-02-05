@@ -7,21 +7,18 @@
 #endif
 
 typedef struct march_info{
-
-
+    int x[100];
+    int y[100];
+    int vx[100];
+    int vy[100];
 }march_info;
 
-typedef struct base_info{
-    int x;
-    int y;
-    int point;
-
-
-}base_info;
-
 typedef struct each_base{
-
-
+    int base_x[10];
+    int base_y[10];
+    int base_point[10];
+    int base_id[10];
+    march_info marchs[10];
 }each_base;
 
 int main() {
@@ -102,14 +99,29 @@ int main() {
     map_rec.w = 22*SCREEN_WIDTH/16; map_rec.h = 20*SCREEN_HEIGHT/16;
     srand(time(NULL));
     int l = 50;
+    int ran_color = rand()%4;
     xy_maker(l, rand()%(14*SCREEN_WIDTH/100) + 11*SCREEN_WIDTH/100,
              rand()%(17*SCREEN_HEIGHT/100) + 28*SCREEN_HEIGHT/100, x, y, 0);
     xy_maker(l, rand()%(8*SCREEN_WIDTH/100) + 29*SCREEN_WIDTH/100,
              rand()%(15*SCREEN_HEIGHT/100) + 65*SCREEN_HEIGHT/100, x, y, 1);
-    xy_maker(l, rand()%(18*SCREEN_WIDTH/100) + 77*SCREEN_WIDTH/100,
+    xy_maker(l, rand()%(12*SCREEN_WIDTH/100) + 85*SCREEN_WIDTH/100,
              rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, x, y, 2);
     xy_maker(l, rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
              rand()%(14*SCREEN_HEIGHT/100) + 63*SCREEN_HEIGHT/100, x, y, 3);
+    //friendly
+    xy_maker(l, rand()%(13*SCREEN_WIDTH/100) + 57*SCREEN_WIDTH/100,
+             rand()%(10*SCREEN_HEIGHT/100) + 30*SCREEN_HEIGHT/100, x, y, 4);
+    xy_maker(l, rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
+             rand()%(10*SCREEN_HEIGHT/100) + 45*SCREEN_HEIGHT/100, x, y, 5);
+    xy_maker(l, rand()%(5*SCREEN_WIDTH/100) + 92*SCREEN_WIDTH/100,
+             rand()%(14*SCREEN_HEIGHT/100) + 66*SCREEN_HEIGHT/100, x, y, 6);
+    xy_maker(l, rand()%(12*SCREEN_WIDTH/100) + 28*SCREEN_WIDTH/100,
+             rand()%(13*SCREEN_HEIGHT/100) + 12*SCREEN_HEIGHT/100, x, y, 7);
+    xy_maker(l, rand()%(8*SCREEN_WIDTH/100) + 75*SCREEN_WIDTH/100,
+             rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, x, y, 8);
+    xy_maker(l, rand()%(9*SCREEN_WIDTH/100) + 17*SCREEN_WIDTH/100,
+             rand()%(15*SCREEN_HEIGHT/100) + 47*SCREEN_HEIGHT/100, x, y, 9);
+
     
 
 

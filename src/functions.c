@@ -73,17 +73,21 @@ void xy_maker(int l, Sint16 mid_x, Sint16 mid_y, Sint16 x[30][6], Sint16 y[30][6
 }
 
 void draw_map(){
-    for(int i = 0;i < 4;i++){
+    for(int i = 0;i < 10;i++){
         if(i == 0){
-            filledPolygonColor(sdlRenderer, x[i], y[i], 6, 0xff0000ff);
+            filledPolygonColor(sdlRenderer, x[i], y[i], 6, 0xffffff46);
             polygonColor(sdlRenderer, x[i], y[i], 6, 0xff000000);
         }
         else if(i == 1){
-            filledPolygonColor(sdlRenderer, x[i], y[i], 6, 0xffff0000);
+            filledPolygonColor(sdlRenderer, x[i], y[i], 6, 0xfff010ff);
             polygonColor(sdlRenderer, x[i], y[i], 6, 0xff000000);
         }
         else if(i == 2){
-            filledPolygonColor(sdlRenderer, x[i], y[i], 6, 0xff00ff00);
+            filledPolygonColor(sdlRenderer, x[i], y[i], 6, 0xffe81815);
+            polygonColor(sdlRenderer, x[i], y[i], 6, 0xff000000);
+        }
+        else if(i == 3){
+            filledPolygonColor(sdlRenderer, x[i], y[i], 6, 0xff7a0a53);
             polygonColor(sdlRenderer, x[i], y[i], 6, 0xff000000);
         }
         else{
