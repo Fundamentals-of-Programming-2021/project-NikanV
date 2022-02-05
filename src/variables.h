@@ -23,5 +23,3 @@ extern SDL_bool goto_new_game;
 
 extern Sint16 mid_xs[30]; extern Sint16 mid_ys[30];
 extern Sint16 x[30][6]; extern Sint16 y[30][6];
-extern Sint16 nx[6]; extern Sint16 ny[6];
-extern Sint16 max_shapes;

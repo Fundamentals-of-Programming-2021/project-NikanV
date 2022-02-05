@@ -26,10 +26,9 @@ void get_img_and_rect(char* path, SDL_Texture** texture);
 
 SDL_Color color(int r, int g, int b, int a);
 
-void xy_maker(int l, int ran, Sint16 x[30][6], Sint16 y[30][6],
-              Sint16 mid_x, Sint16 mid_y, Sint16 mid_xs[30], Sint16 mid_ys[30], Sint16 lower, Sint16 upper);
+void xy_maker(int l, Sint16 mid_x, Sint16 mid_y, Sint16 x[30][6], Sint16 y[30][6], int index);
 
-void draw_map(Sint16 nx[6], Sint16 ny[6], Sint16 x[30][6], Sint16 y[30][6], int blue, int red, int green);
+void draw_map();
 
 void draw_start(SDL_Texture* start_bg_tex, SDL_Texture* logo_tex, SDL_Texture* name_tex, SDL_Texture* input_tex,
                 SDL_Texture* submit_button, SDL_Rect logo_rec, SDL_Rect name_rec, SDL_Rect input_rec,

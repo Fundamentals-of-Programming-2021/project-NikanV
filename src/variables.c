@@ -23,6 +23,4 @@ SDL_bool goto_new_game = false;
 
 Sint16 mid_xs[30]; Sint16 mid_ys[30];
 Sint16 x[30][6]; Sint16 y[30][6];
-Sint16 nx[6]; Sint16 ny[6];
-Sint16 max_shapes = 0;
 

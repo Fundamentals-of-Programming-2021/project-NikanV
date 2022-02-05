@@ -6,6 +6,23 @@
 #undef main
 #endif
 
+typedef struct march_info{
+
+
+}march_info;
+
+typedef struct base_info{
+    int x;
+    int y;
+    int point;
+
+
+}base_info;
+
+typedef struct each_base{
+
+
+}each_base;
 
 int main() {
     //initialize
@@ -78,25 +95,29 @@ int main() {
                       "Back", &back, &back_rec);
 
     //new_game
-    while(max_shapes < 20){
-        max_shapes = 0;
-        xy_maker(130, rand(), x, y, 3*SCREEN_WIDTH/10, SCREEN_HEIGHT/2, mid_xs, mid_ys,
-                 130, 3*SCREEN_WIDTH/5 - 70);
-    }
-    int blue = rand()%max_shapes, red = rand()%max_shapes, green = rand()%max_shapes;
-    while(1) {
-        if (red == blue) {red = rand()%max_shapes;}
-        if(green == red || green == blue){green = rand()%max_shapes;}
-        if(red != blue && red != green && blue != green){break;}
-    }
-
+    SDL_Texture* map;
+    get_img_and_rect("../map.jpg", &map);
+    SDL_Rect map_rec;
+    map_rec.x = -SCREEN_WIDTH/8; map_rec.y = -SCREEN_HEIGHT/16;
+    map_rec.w = 22*SCREEN_WIDTH/16; map_rec.h = 20*SCREEN_HEIGHT/16;
+    srand(time(NULL));
+    int l = 50;
+    xy_maker(l, rand()%(14*SCREEN_WIDTH/100) + 11*SCREEN_WIDTH/100,
+             rand()%(17*SCREEN_HEIGHT/100) + 28*SCREEN_HEIGHT/100, x, y, 0);
+    xy_maker(l, rand()%(8*SCREEN_WIDTH/100) + 29*SCREEN_WIDTH/100,
+             rand()%(15*SCREEN_HEIGHT/100) + 65*SCREEN_HEIGHT/100, x, y, 1);
+    xy_maker(l, rand()%(18*SCREEN_WIDTH/100) + 77*SCREEN_WIDTH/100,
+             rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, x, y, 2);
+    xy_maker(l, rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
+             rand()%(14*SCREEN_HEIGHT/100) + 63*SCREEN_HEIGHT/100, x, y, 3);
+    
 
 
 
     while (shallExit == SDL_FALSE) {
         //starting game
         if(goto_start) {
-            SDL_SetRenderDrawColor(sdlRenderer, 0x00, 0x00, 0x00, 0xff);
+            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0x00, 0xff);
             SDL_RenderClear(sdlRenderer);
 
             draw_start(start_bg_tex, logo_tex, name_tex, input_tex, submit_button, logo_rec,
@@ -203,10 +224,11 @@ int main() {
 
         //goto new_game
         if(goto_new_game){
-            SDL_SetRenderDrawColor(sdlRenderer, 0xa5, 0xa5, 0xa5, 0xff);
+            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0xff, 0xff, 0xff);
             SDL_RenderClear(sdlRenderer);
+            SDL_RenderCopy(sdlRenderer, map, NULL, &map_rec);
 
-            draw_map(nx, ny, x, y, blue, red, green);
+            draw_map();
 
 
 
@@ -240,6 +262,7 @@ int main() {
     SDL_DestroyTexture(con_game);
     SDL_DestroyTexture(leaderboard);
     SDL_DestroyTexture(back);
+    SDL_DestroyTexture(map);
 
     End();
 
