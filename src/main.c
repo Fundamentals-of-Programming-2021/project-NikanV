@@ -6,21 +6,6 @@
 #undef main
 #endif
 
-typedef struct march_info{
-    int x[100];
-    int y[100];
-    int vx[100];
-    int vy[100];
-}march_info;
-
-typedef struct each_base{
-    int base_x[10];
-    int base_y[10];
-    int base_point[10];
-    int base_id[10];
-    march_info marchs[10];
-}each_base;
-
 int main() {
     //initialize
     Init();
@@ -98,31 +83,32 @@ int main() {
     map_rec.x = -SCREEN_WIDTH/8; map_rec.y = -SCREEN_HEIGHT/16;
     map_rec.w = 22*SCREEN_WIDTH/16; map_rec.h = 20*SCREEN_HEIGHT/16;
     srand(time(NULL));
-    int l = 50;
+    int first = -1, second = -1;
     int ran_color = rand()%4;
-    xy_maker(l, rand()%(14*SCREEN_WIDTH/100) + 11*SCREEN_WIDTH/100,
-             rand()%(17*SCREEN_HEIGHT/100) + 28*SCREEN_HEIGHT/100, x, y, 0);
-    xy_maker(l, rand()%(8*SCREEN_WIDTH/100) + 29*SCREEN_WIDTH/100,
-             rand()%(15*SCREEN_HEIGHT/100) + 65*SCREEN_HEIGHT/100, x, y, 1);
-    xy_maker(l, rand()%(12*SCREEN_WIDTH/100) + 85*SCREEN_WIDTH/100,
-             rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, x, y, 2);
-    xy_maker(l, rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
-             rand()%(14*SCREEN_HEIGHT/100) + 63*SCREEN_HEIGHT/100, x, y, 3);
+    xy_maker(rand()%(14*SCREEN_WIDTH/100) + 11*SCREEN_WIDTH/100,
+             rand()%(17*SCREEN_HEIGHT/100) + 28*SCREEN_HEIGHT/100, 0);
+    xy_maker(rand()%(8*SCREEN_WIDTH/100) + 29*SCREEN_WIDTH/100,
+             rand()%(15*SCREEN_HEIGHT/100) + 65*SCREEN_HEIGHT/100, 1);
+    xy_maker(rand()%(12*SCREEN_WIDTH/100) + 85*SCREEN_WIDTH/100,
+             rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, 2);
+    xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
+             rand()%(14*SCREEN_HEIGHT/100) + 63*SCREEN_HEIGHT/100, 3);
     //friendly
-    xy_maker(l, rand()%(13*SCREEN_WIDTH/100) + 57*SCREEN_WIDTH/100,
-             rand()%(10*SCREEN_HEIGHT/100) + 30*SCREEN_HEIGHT/100, x, y, 4);
-    xy_maker(l, rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
-             rand()%(10*SCREEN_HEIGHT/100) + 45*SCREEN_HEIGHT/100, x, y, 5);
-    xy_maker(l, rand()%(5*SCREEN_WIDTH/100) + 92*SCREEN_WIDTH/100,
-             rand()%(14*SCREEN_HEIGHT/100) + 66*SCREEN_HEIGHT/100, x, y, 6);
-    xy_maker(l, rand()%(12*SCREEN_WIDTH/100) + 28*SCREEN_WIDTH/100,
-             rand()%(13*SCREEN_HEIGHT/100) + 12*SCREEN_HEIGHT/100, x, y, 7);
-    xy_maker(l, rand()%(8*SCREEN_WIDTH/100) + 75*SCREEN_WIDTH/100,
-             rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, x, y, 8);
-    xy_maker(l, rand()%(9*SCREEN_WIDTH/100) + 17*SCREEN_WIDTH/100,
-             rand()%(15*SCREEN_HEIGHT/100) + 47*SCREEN_HEIGHT/100, x, y, 9);
+    xy_maker(rand()%(13*SCREEN_WIDTH/100) + 57*SCREEN_WIDTH/100,
+             rand()%(10*SCREEN_HEIGHT/100) + 30*SCREEN_HEIGHT/100, 4);
+    xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
+             rand()%(10*SCREEN_HEIGHT/100) + 45*SCREEN_HEIGHT/100, 5);
+    xy_maker(rand()%(5*SCREEN_WIDTH/100) + 92*SCREEN_WIDTH/100,
+             rand()%(14*SCREEN_HEIGHT/100) + 66*SCREEN_HEIGHT/100, 6);
+    xy_maker(rand()%(12*SCREEN_WIDTH/100) + 28*SCREEN_WIDTH/100,
+             rand()%(13*SCREEN_HEIGHT/100) + 12*SCREEN_HEIGHT/100, 7);
+    xy_maker(rand()%(8*SCREEN_WIDTH/100) + 75*SCREEN_WIDTH/100,
+             rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, 8);
+    xy_maker(rand()%(9*SCREEN_WIDTH/100) + 17*SCREEN_WIDTH/100,
+             rand()%(15*SCREEN_HEIGHT/100) + 47*SCREEN_HEIGHT/100, 9);
 
-    
+    //logic
+    input_struct();
 
 
 
@@ -240,17 +226,60 @@ int main() {
             SDL_RenderClear(sdlRenderer);
             SDL_RenderCopy(sdlRenderer, map, NULL, &map_rec);
 
+            point_adder++;
             draw_map();
+            make_march();
+            for(int i = 0;i < total_marches;i++){
+                for(int j = 0;j < 100;j++){
+                    if(all_bases.marches[i].is_atk[j] == true){
+                        filledCircleColor(sdlRenderer, all_bases.marches[i].x[j],
+                                          all_bases.marches[i].y[j], 10,
+                                          all_bases.base_id[all_bases.marches[i].src_index]);
+                    }
+                }
+            }
+            apply_speed_point();
 
+            stop_speed();
 
 
             SDL_Event e;
             while(SDL_PollEvent(&e)) {
-                if (e.type == SDL_QUIT) {
-                    shallExit = SDL_TRUE;
-                    break;
+                switch(e.type) {
+                    case SDL_QUIT:
+                        shallExit = SDL_TRUE;
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        for(int i = 0;i < 10;i++){
+                            if(abs(e.button.x - all_bases.base_x[i]) < l &&
+                               abs(e.button.y - all_bases.base_y[i]) < l){
+                                if(first == -1){
+                                    if(all_bases.base_id[i] == 0xffffff46) {
+                                        first = i;
+                                    }
+                                }
+                                else{
+                                    second = i;
+                                    delta_y = all_bases.base_y[second] - all_bases.base_y[first];
+                                    delta_x = all_bases.base_x[second] - all_bases.base_x[first];
+                                    theta = atan(delta_y/delta_x);
+                                    all_bases.marches[total_marches].vx = speed*cos(theta);
+                                    all_bases.marches[total_marches].vy = speed*sin(theta);
+                                    all_bases.marches[total_marches].total_soldiers = all_bases.base_points[first];
+                                    all_bases.base_points[first] = 0;
+                                    all_bases.marches[total_marches].src_index = first;
+                                    all_bases.marches[total_marches].des_index = second;
+                                    total_marches++;
+                                    first = -1;
+                                    second = -1;
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
-
             }
 
         }

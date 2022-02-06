@@ -21,6 +21,14 @@ SDL_bool goto_start = true;
 SDL_bool goto_main_menu = false;
 SDL_bool goto_new_game = false;
 
-Sint16 mid_xs[30]; Sint16 mid_ys[30];
 Sint16 x[30][6]; Sint16 y[30][6];
+int tmp_point[10] = {0};
+int tmp_index[10] = {0};
 
+
+each_base all_bases;
+int l = 50;
+int point_adder = 0;
+float delta_y, delta_x, theta;
+Sint16 speed = 10;
+int total_marches = 0;

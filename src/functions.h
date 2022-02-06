@@ -14,6 +14,8 @@
 #include <stdbool.h>
 #include <time.h>
 
+
+
 void Init();
 
 void Begin();
@@ -26,7 +28,7 @@ void get_img_and_rect(char* path, SDL_Texture** texture);
 
 SDL_Color color(int r, int g, int b, int a);
 
-void xy_maker(int l, Sint16 mid_x, Sint16 mid_y, Sint16 x[30][6], Sint16 y[30][6], int index);
+void xy_maker(Sint16 mid_x, Sint16 mid_y, int index);
 
 void draw_map();
 
@@ -37,3 +39,13 @@ void draw_start(SDL_Texture* start_bg_tex, SDL_Texture* logo_tex, SDL_Texture* n
 void draw_main_menu(SDL_Texture* main_menu_bg_tex, SDL_Texture* new_game, SDL_Texture* con_game,
                     SDL_Texture* leaderboard, SDL_Texture* back, SDL_Texture* ingame_name, SDL_Rect new_game_rec,
                     SDL_Rect con_game_rec, SDL_Rect leaderboard_rec, SDL_Rect back_rec, SDL_Rect ingame_name_rec);
+
+void input_struct();
+
+void make_march();
+
+void apply_speed_point();
+
+void stop_speed();
+
+void change_id();
