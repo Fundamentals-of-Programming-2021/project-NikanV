@@ -363,3 +363,88 @@ void selecting_bases(SDL_Event e, int* first, int* second){
         }
     }
 }
+
+void top_four(SDL_Texture *places_tex[4], SDL_Rect places_rec[4]){
+    char number[5];
+    for(int i = 0;i < 10;i++){
+        if(all_bases.base_id[i] == 0xaaffff46){
+            leader_base[0]++;
+        }
+        else if(all_bases.base_id[i] == 0xaaf010ff){
+            leader_base[1]++;
+        }
+        else if(all_bases.base_id[i] == 0xaae81815){
+            leader_base[2]++;
+        }
+        else if(all_bases.base_id[i] == 0xaa7a0a53){
+            leader_base[3]++;
+        }
+    }
+    int first = -1;
+    for(int i = 3;i >= 0;i--){
+        for(int j = 0;j < 4;j++){
+            if(leader_base[i] < leader_base[j]){
+                break;
+            }
+            else{first = i;}
+        }
+    }
+    boxColor(sdlRenderer, 83*SCREEN_WIDTH/100, SCREEN_HEIGHT/100, 99*SCREEN_WIDTH/100,
+             7*SCREEN_HEIGHT/100, 0xffffffff);
+    sprintf(number, "%d", leader_base[first]);
+    if(first == 0) {
+        get_text_and_rect(color(70, 255, 255, 255), 85 * SCREEN_WIDTH / 100,
+                          2 * SCREEN_HEIGHT / 100,6 * SCREEN_WIDTH / 100, 4 * SCREEN_HEIGHT / 100,
+                          "You", &places_tex[1],&places_rec[1]);
+        get_text_and_rect(color(70, 255, 255, 255), 95*SCREEN_WIDTH/100, 2*SCREEN_HEIGHT/100,
+                          2*SCREEN_WIDTH/100, 4*SCREEN_HEIGHT/100, number, &places_tex[0],
+                          &places_rec[0]);
+        SDL_RenderCopy(sdlRenderer, places_tex[1], NULL, &places_rec[1]);
+    }
+    else if(first == 1) {
+        get_text_and_rect(color(255, 160, 240, 255), 85 * SCREEN_WIDTH / 100,
+                          2 * SCREEN_HEIGHT / 100,8 * SCREEN_WIDTH / 100, 4 * SCREEN_HEIGHT / 100,
+                          "Pink", &places_tex[1],&places_rec[1]);
+        get_text_and_rect(color(255, 160, 240, 255), 95*SCREEN_WIDTH/100, 2*SCREEN_HEIGHT/100,
+                          2*SCREEN_WIDTH/100, 4*SCREEN_HEIGHT/100, number, &places_tex[0],
+                          &places_rec[0]);
+        SDL_RenderCopy(sdlRenderer, places_tex[1], NULL, &places_rec[1]);
+    }
+    else if(first == 2) {
+        get_text_and_rect(color(21, 24, 232, 255), 85 * SCREEN_WIDTH / 100,
+                          2 * SCREEN_HEIGHT / 100,8 * SCREEN_WIDTH / 100, 4 * SCREEN_HEIGHT / 100,
+                          "Blue", &places_tex[1],&places_rec[1]);
+        get_text_and_rect(color(21, 24, 232, 255), 95*SCREEN_WIDTH/100, 2*SCREEN_HEIGHT/100,
+                          2*SCREEN_WIDTH/100, 4*SCREEN_HEIGHT/100, number, &places_tex[0],
+                          &places_rec[0]);
+        SDL_RenderCopy(sdlRenderer, places_tex[1], NULL, &places_rec[1]);
+    }
+    else if(first == 3) {
+        get_text_and_rect(color(83, 10, 122, 255), 85 * SCREEN_WIDTH / 100,
+                          2 * SCREEN_HEIGHT / 100,9 * SCREEN_WIDTH / 100, 4 * SCREEN_HEIGHT / 100,
+                          "Purple", &places_tex[1],&places_rec[1]);
+        get_text_and_rect(color(83, 10, 122, 255), 95*SCREEN_WIDTH/100, 2*SCREEN_HEIGHT/100,
+                          2*SCREEN_WIDTH/100, 4*SCREEN_HEIGHT/100, number, &places_tex[0],
+                          &places_rec[0]);
+        SDL_RenderCopy(sdlRenderer, places_tex[1], NULL, &places_rec[1]);
+    }
+    SDL_RenderCopy(sdlRenderer, places_tex[0], NULL, &places_rec[0]);
+    for(int i = 0;i < 4;i++){
+        leader_base[i] = 0;
+    }
+}
+
+void check_winner(){
+    int temp_id = all_bases.base_id[0];
+    for(int i = 1;i < 10;i++){
+        if(all_bases.base_id[i] != temp_id){
+            temp_id = 0;
+            break;
+        }
+    }
+    if(temp_id != 0){
+        temp_id = 0xaaffff46;
+        goto_game = false;
+        goto_winner = true;
+    }
+}

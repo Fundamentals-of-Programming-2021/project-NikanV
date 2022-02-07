@@ -60,3 +60,7 @@ void stop_speed();
 
 void selecting_bases(SDL_Event e, int* first, int* second);
 
+void top_four(SDL_Texture *places_tex[4], SDL_Rect places_rec[4]);
+
+void check_winner();
+

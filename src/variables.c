@@ -22,6 +22,7 @@ SDL_bool goto_main_menu = false;
 SDL_bool goto_game = false;
 SDL_bool goto_map_picker = false;
 SDL_bool goto_diff_pick = false;
+SDL_bool goto_winner;
 
 
 
@@ -35,3 +36,6 @@ double speed = 5;
 int total_marches = 0;
 SDL_Texture* points_tex[10];
 
+int leader_base[4];
+
+bool pick_easy = false, pick_medium = false, pick_hard = false;

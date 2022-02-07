@@ -22,7 +22,7 @@ extern SDL_bool goto_main_menu;
 extern SDL_bool goto_game;
 extern SDL_bool goto_map_picker;
 extern SDL_bool goto_diff_pick;
-
+extern SDL_bool goto_winner;
 
 extern Sint16 x[30][6]; extern Sint16 y[30][6];
 extern int l;
@@ -45,7 +45,7 @@ typedef struct each_base{
     int points_speed[10];
     int base_id[10];
     bool being_attacked[10];
-    struct march_info marches[100];
+    struct march_info marches[300];
 }each_base;
 
 
@@ -57,3 +57,6 @@ extern double speed;
 extern int total_marches;
 extern SDL_Texture* points_tex[10];
 
+extern int leader_base[4];
+
+extern bool pick_easy, pick_medium, pick_hard;
