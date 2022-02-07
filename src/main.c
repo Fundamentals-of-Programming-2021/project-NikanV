@@ -76,6 +76,40 @@ int main() {
                       4*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
                       "Back", &back, &back_rec);
 
+    //map_picker
+    SDL_Rect random_map;
+    SDL_Rect choose_dif;
+
+    SDL_Texture* random_map_tex;
+    SDL_Texture* choose_dif_tex;
+
+    get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*30/100, SCREEN_HEIGHT*28/100,
+                      10*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
+                      "Random Map", &random_map_tex, &random_map);
+    get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*22/100, SCREEN_HEIGHT*42/100,
+                      14*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
+                      "Choose Difficulty", &choose_dif_tex, &choose_dif);
+
+    //diff pick
+    SDL_Texture* easy;
+    SDL_Texture* medium;
+    SDL_Texture* hard;
+
+    SDL_Rect easy_rec;
+    SDL_Rect medium_rec;
+    SDL_Rect hard_rec;
+
+    get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*42/100, SCREEN_HEIGHT*28/100,
+                      4*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
+                      "Easy", &easy, &easy_rec);
+    get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*38/100, SCREEN_HEIGHT*43/100,
+                      6*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
+                      "Normal", &medium, &medium_rec);
+    get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*42/100, SCREEN_HEIGHT*58/100,
+                      4*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
+                      "Hard", &hard, &hard_rec);
+
+
     //new_game
     SDL_Texture* map;
     get_img_and_rect("../map.jpg", &map);
@@ -85,27 +119,6 @@ int main() {
     srand(time(NULL));
     int first = -1, second = -1;
     int ran = rand()%10;
-    xy_maker(rand()%(14*SCREEN_WIDTH/100) + 11*SCREEN_WIDTH/100,
-             rand()%(17*SCREEN_HEIGHT/100) + 28*SCREEN_HEIGHT/100, ran);
-    xy_maker(rand()%(8*SCREEN_WIDTH/100) + 29*SCREEN_WIDTH/100,
-             rand()%(15*SCREEN_HEIGHT/100) + 65*SCREEN_HEIGHT/100, (ran+1)%10);
-    xy_maker(rand()%(12*SCREEN_WIDTH/100) + 85*SCREEN_WIDTH/100,
-             rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, (ran+2)%10);
-    xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
-             rand()%(14*SCREEN_HEIGHT/100) + 63*SCREEN_HEIGHT/100, (ran+3)%10);
-    //friendly
-    xy_maker(rand()%(13*SCREEN_WIDTH/100) + 57*SCREEN_WIDTH/100,
-             rand()%(10*SCREEN_HEIGHT/100) + 30*SCREEN_HEIGHT/100, (ran+4)%10);
-    xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
-             rand()%(10*SCREEN_HEIGHT/100) + 45*SCREEN_HEIGHT/100, (ran+5)%10);
-    xy_maker(rand()%(5*SCREEN_WIDTH/100) + 92*SCREEN_WIDTH/100,
-             rand()%(14*SCREEN_HEIGHT/100) + 66*SCREEN_HEIGHT/100, (ran+6)%10);
-    xy_maker(rand()%(12*SCREEN_WIDTH/100) + 28*SCREEN_WIDTH/100,
-             rand()%(13*SCREEN_HEIGHT/100) + 12*SCREEN_HEIGHT/100, (ran+7)%10);
-    xy_maker(rand()%(8*SCREEN_WIDTH/100) + 75*SCREEN_WIDTH/100,
-             rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, (ran+8)%10);
-    xy_maker(rand()%(9*SCREEN_WIDTH/100) + 17*SCREEN_WIDTH/100,
-             rand()%(15*SCREEN_HEIGHT/100) + 47*SCREEN_HEIGHT/100, (ran+9)%10);
 
     //logic
     input_struct();
@@ -200,7 +213,7 @@ int main() {
                         else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
                                 e.button.y >= SCREEN_HEIGHT*25/100 && e.button.y <= SCREEN_HEIGHT*35/100){
                             //new_game
-                            goto_new_game = true;
+                            goto_map_picker = true;
                             goto_main_menu = false;
                         }
                         else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
@@ -220,8 +233,98 @@ int main() {
 
         }
 
+        //map_picker
+        if(goto_map_picker){
+            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0xff, 0xff);
+            SDL_RenderClear(sdlRenderer);
+
+            draw_map_picker(main_menu_bg_tex, ingame_name, ingame_name_rec, random_map_tex, random_map,
+                            choose_dif_tex, choose_dif, back, back_rec);
+
+
+            SDL_Event e;
+            while(SDL_PollEvent(&e)){
+                switch (e.type) {
+                    case SDL_QUIT:
+                        shallExit = SDL_TRUE;
+                        break;
+                    case SDL_MOUSEBUTTONUP:
+                        if(e.button.x >= SCREEN_WIDTH*40/100 && e.button.x <= SCREEN_WIDTH*60/100 &&
+                           e.button.y >= SCREEN_HEIGHT*70/100 && e.button.y <= SCREEN_HEIGHT*80/100){
+                            //back to main menu
+                            goto_main_menu = true;
+                            goto_map_picker = false;
+                        }
+                        else if(e.button.x >= SCREEN_WIDTH*28/100 && e.button.x <= SCREEN_WIDTH*72/100 &&
+                                e.button.y >= SCREEN_HEIGHT*25/100 && e.button.y <= SCREEN_HEIGHT*35/100){
+                            //start game
+                            goto_map_picker = false;
+                            goto_game = true;
+                            xy_maker(rand()%(14*SCREEN_WIDTH/100) + 11*SCREEN_WIDTH/100,
+                                     rand()%(17*SCREEN_HEIGHT/100) + 28*SCREEN_HEIGHT/100, ran);
+                            xy_maker(rand()%(8*SCREEN_WIDTH/100) + 29*SCREEN_WIDTH/100,
+                                     rand()%(15*SCREEN_HEIGHT/100) + 65*SCREEN_HEIGHT/100, (ran+1)%10);
+                            xy_maker(rand()%(12*SCREEN_WIDTH/100) + 85*SCREEN_WIDTH/100,
+                                     rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, (ran+2)%10);
+                            xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
+                                     rand()%(14*SCREEN_HEIGHT/100) + 63*SCREEN_HEIGHT/100, (ran+3)%10);
+                            //friendly
+                            xy_maker(rand()%(13*SCREEN_WIDTH/100) + 57*SCREEN_WIDTH/100,
+                                     rand()%(10*SCREEN_HEIGHT/100) + 30*SCREEN_HEIGHT/100, (ran+4)%10);
+                            xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
+                                     rand()%(10*SCREEN_HEIGHT/100) + 45*SCREEN_HEIGHT/100, (ran+5)%10);
+                            xy_maker(rand()%(5*SCREEN_WIDTH/100) + 92*SCREEN_WIDTH/100,
+                                     rand()%(14*SCREEN_HEIGHT/100) + 66*SCREEN_HEIGHT/100, (ran+6)%10);
+                            xy_maker(rand()%(12*SCREEN_WIDTH/100) + 28*SCREEN_WIDTH/100,
+                                     rand()%(13*SCREEN_HEIGHT/100) + 12*SCREEN_HEIGHT/100, (ran+7)%10);
+                            xy_maker(rand()%(8*SCREEN_WIDTH/100) + 75*SCREEN_WIDTH/100,
+                                     rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, (ran+8)%10);
+                            xy_maker(rand()%(9*SCREEN_WIDTH/100) + 17*SCREEN_WIDTH/100,
+                                     rand()%(15*SCREEN_HEIGHT/100) + 47*SCREEN_HEIGHT/100, (ran+9)%10);
+                        }
+                        else if(e.button.x >= SCREEN_WIDTH*20/100 && e.button.x <= SCREEN_WIDTH*80/100 &&
+                                e.button.y >= SCREEN_HEIGHT*40/100 && e.button.y <= SCREEN_HEIGHT*50/100){
+                            goto_map_picker = false;
+                            goto_diff_pick = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        }
+
+        //goto diff_pick
+        if(goto_diff_pick){
+            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0xff, 0xff);
+            SDL_RenderClear(sdlRenderer);
+
+            draw_diff_pick(main_menu_bg_tex, ingame_name, ingame_name_rec, easy, medium, hard,
+                           easy_rec, medium_rec, hard_rec, back, back_rec);
+
+            SDL_Event e;
+            while(SDL_PollEvent(&e)){
+                switch (e.type) {
+                    case SDL_QUIT:
+                        shallExit = SDL_TRUE;
+                        break;
+                    case SDL_MOUSEBUTTONUP:
+                        if(e.button.x >= SCREEN_WIDTH*40/100 && e.button.x <= SCREEN_WIDTH*60/100 &&
+                           e.button.y >= SCREEN_HEIGHT*70/100 && e.button.y <= SCREEN_HEIGHT*80/100){
+                            //back to map picker
+                            goto_map_picker = true;
+                            goto_diff_pick = false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         //goto new_game
-        if(goto_new_game){
+        if(goto_game){
             SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0xff, 0xff, 0xff);
             SDL_RenderClear(sdlRenderer);
             SDL_RenderCopy(sdlRenderer, map, NULL, &map_rec);
@@ -269,6 +372,12 @@ int main() {
     SDL_DestroyTexture(leaderboard);
     SDL_DestroyTexture(back);
     SDL_DestroyTexture(map);
+    SDL_DestroyTexture(random_map_tex);
+    SDL_DestroyTexture(choose_dif_tex);
+    SDL_DestroyTexture(easy);
+    SDL_DestroyTexture(medium);
+    SDL_DestroyTexture(hard);
+
 
     End();
 

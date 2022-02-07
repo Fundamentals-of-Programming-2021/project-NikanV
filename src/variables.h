@@ -19,7 +19,10 @@ extern char* username;
 extern SDL_bool shallExit;
 extern SDL_bool goto_start;
 extern SDL_bool goto_main_menu;
-extern SDL_bool goto_new_game;
+extern SDL_bool goto_game;
+extern SDL_bool goto_map_picker;
+extern SDL_bool goto_diff_pick;
+
 
 extern Sint16 x[30][6]; extern Sint16 y[30][6];
 extern int l;
@@ -39,6 +42,7 @@ typedef struct each_base{
     Sint16 base_x[10];
     Sint16 base_y[10];
     int base_points[10];
+    int points_speed[10];
     int base_id[10];
     bool being_attacked[10];
     struct march_info marches[100];
@@ -51,3 +55,5 @@ extern int point_adder;
 extern double delta_y, delta_x, theta;
 extern double speed;
 extern int total_marches;
+extern SDL_Texture* points_tex[10];
+

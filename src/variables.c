@@ -19,7 +19,11 @@ char* username;
 SDL_bool shallExit = SDL_FALSE;
 SDL_bool goto_start = true;
 SDL_bool goto_main_menu = false;
-SDL_bool goto_new_game = false;
+SDL_bool goto_game = false;
+SDL_bool goto_map_picker = false;
+SDL_bool goto_diff_pick = false;
+
+
 
 Sint16 x[30][6]; Sint16 y[30][6];
 
@@ -27,5 +31,7 @@ each_base all_bases;
 int l = 70;
 int point_adder = 0;
 double delta_y, delta_x, theta;
-double speed = 7;
+double speed = 5;
 int total_marches = 0;
+SDL_Texture* points_tex[10];
+
