@@ -22,15 +22,13 @@ extern SDL_bool goto_main_menu;
 extern SDL_bool goto_new_game;
 
 extern Sint16 x[30][6]; extern Sint16 y[30][6];
-extern int tmp_point[10];
-extern int tmp_index[10];
 extern int l;
 
 typedef struct march_info{
     Sint16 x[100];
     Sint16 y[100];
-    Sint16 vx;
-    Sint16 vy;
+    double vx;
+    double vy;
     bool is_atk[100];
     int total_soldiers;
     int src_index;
@@ -42,13 +40,14 @@ typedef struct each_base{
     Sint16 base_y[10];
     int base_points[10];
     int base_id[10];
-    int base_attack[10];
-    struct march_info marches[20];
+    bool being_attacked[10];
+    struct march_info marches[100];
 }each_base;
+
 
 extern each_base all_bases;
 extern int point_adder;
 
-extern float delta_y, delta_x, theta;
-extern Sint16 speed;
+extern double delta_y, delta_x, theta;
+extern double speed;
 extern int total_marches;

@@ -44,8 +44,11 @@ void input_struct();
 
 void make_march();
 
+void draw_march();
+
 void apply_speed_point();
 
 void stop_speed();
 
-void change_id();
+void selecting_bases(SDL_Event e, int* first, int* second);
+
