@@ -56,7 +56,7 @@ extern int point_adder;
 extern double delta_y, delta_x, theta;
 extern double speed;
 extern int total_marches;
-extern SDL_Texture* points_tex[10];
+extern SDL_Texture* points_tex;
 
 extern int leader_base[4];
 

@@ -15,9 +15,9 @@ int main() {
 
     //images
     SDL_Texture* start_bg_tex;
-    get_img_and_rect("../start.jpg", &start_bg_tex);
+    get_img_and_rect("../images/start.jpg", &start_bg_tex);
     SDL_Texture* main_menu_bg_tex;
-    get_img_and_rect("../start.jpg", &main_menu_bg_tex);
+    get_img_and_rect("../images/start.jpg", &main_menu_bg_tex);
 
     //credits
     SDL_Texture* logo_tex;
@@ -112,7 +112,7 @@ int main() {
 
     //new_game
     SDL_Texture* map;
-    get_img_and_rect("../map.jpg", &map);
+    get_img_and_rect("../images/map.jpg", &map);
     SDL_Rect map_rec;
     map_rec.x = -SCREEN_WIDTH/8; map_rec.y = -SCREEN_HEIGHT/16;
     map_rec.w = 22*SCREEN_WIDTH/16; map_rec.h = 20*SCREEN_HEIGHT/16;
@@ -388,6 +388,9 @@ int main() {
             SDL_RenderCopy(sdlRenderer, map, NULL, &map_rec);
 
             point_adder++;
+            if(point_adder == 1000000){
+                point_adder = 0;
+            }
             bot_ran++;
             bot_ran %= 10;
             draw_map();
@@ -397,7 +400,8 @@ int main() {
             stop_speed();
             top_four(places_tex, places_rec);
             check_winner();
-            bot_movements(&first, &second, bot_ran);
+            //bot_movements(&first, &second, bot_ran);
+            check_accidents();
 
             SDL_Event e;
             while(SDL_PollEvent(&e)) {
@@ -459,9 +463,8 @@ int main() {
     SDL_DestroyTexture(medium);
     SDL_DestroyTexture(hard);
     SDL_DestroyTexture(places_tex);
-    for(int i = 0;i < 10;i++){
-        SDL_DestroyTexture(points_tex[i]);
-    }
+    SDL_DestroyTexture(points_tex);
+
 
 
     End();

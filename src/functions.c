@@ -139,8 +139,8 @@ void draw_map(){
         sprintf(number, "%d", all_bases.base_points[i]);
         get_text_and_rect(color(0, 0, 0, 255), all_bases.base_x[i] - SCREEN_WIDTH/100,
                           all_bases.base_y[i] - SCREEN_HEIGHT/100, 2*SCREEN_WIDTH/100, 2*SCREEN_HEIGHT/100,
-                          number, &points_tex[i],&points_rec);
-        SDL_RenderCopy(sdlRenderer, points_tex[i], NULL, &points_rec);
+                          number, &points_tex,&points_rec);
+        SDL_RenderCopy(sdlRenderer, points_tex, NULL, &points_rec);
     }
 }
 
@@ -262,13 +262,13 @@ void apply_speed_point(){
                         if(delta_x < 0 && all_bases.marches[j].vx > 0){
                             all_bases.marches[j].vx *= -1;
                         }
-                        if(delta_x > 0 && all_bases.marches[j].vx < 0){
+                        else if(delta_x > 0 && all_bases.marches[j].vx < 0){
                             all_bases.marches[j].vx *= -1;
                         }
                         if(delta_y < 0 && all_bases.marches[j].vy > 0){
                             all_bases.marches[j].vy *= -1;
                         }
-                        if(delta_y > 0 && all_bases.marches[j].vy < 0){
+                        else if(delta_y > 0 && all_bases.marches[j].vy < 0){
                             all_bases.marches[j].vy *= -1;
                         }
                         all_bases.marches[j].x[z] += all_bases.marches[j].vx;
@@ -284,11 +284,7 @@ void stop_speed(){
     for(int i = 0;i < total_marches;i++){
         for(int j = 0;j < 200;j++){
             if(all_bases.marches[i].is_atk[j] == true){
-                if((all_bases.marches[i].vy == 0 &&
-                        abs(all_bases.marches[i].x[j]-all_bases.base_x[all_bases.marches[i].des_index]) < l/2) ||
-                        (all_bases.marches[i].vx == 0 &&
-                        abs(all_bases.marches[i].y[j]-all_bases.base_y[all_bases.marches[i].des_index]) < l/2) ||
-                        (abs(all_bases.marches[i].x[j]-all_bases.base_x[all_bases.marches[i].des_index]) < l/2 &&
+                if((abs(all_bases.marches[i].x[j]-all_bases.base_x[all_bases.marches[i].des_index]) < l/2 &&
                         abs(all_bases.marches[i].y[j]-all_bases.base_y[all_bases.marches[i].des_index]) < l/2)){
                     all_bases.marches[i].is_atk[j] = false;
                     all_bases.marches[i].x[j] = 0;
@@ -310,7 +306,7 @@ void stop_speed(){
                         }
 
                     }
-                    if(j == 1){
+                    if(j <= 3){
                         all_bases.being_attacked[all_bases.marches[i].des_index] = false;
                     }
                 }
@@ -320,32 +316,34 @@ void stop_speed(){
 }
 
 void make_attack(int* first, int* second){
-    delta_y = (double) (all_bases.base_y[*second] - all_bases.base_y[*first]);
-    delta_x = (double) (all_bases.base_x[*second] - all_bases.base_x[*first]);
-    theta = atan(delta_y / delta_x);
-    all_bases.marches[total_marches].vx = speed * cos(theta);
-    all_bases.marches[total_marches].vy = speed * sin(theta);
-    if (delta_x < 0 && all_bases.marches[total_marches].vx > 0) {
-        all_bases.marches[total_marches].vx *= -1;
+    if(all_bases.base_points[*first] > 0) {
+        delta_y = (double) (all_bases.base_y[*second] - all_bases.base_y[*first]);
+        delta_x = (double) (all_bases.base_x[*second] - all_bases.base_x[*first]);
+        theta = atan(delta_y / delta_x);
+        all_bases.marches[total_marches].vx = speed * cos(theta);
+        all_bases.marches[total_marches].vy = speed * sin(theta);
+        if (delta_x < 0 && all_bases.marches[total_marches].vx > 0) {
+            all_bases.marches[total_marches].vx *= -1;
+        }
+        if (delta_x > 0 && all_bases.marches[total_marches].vx < 0) {
+            all_bases.marches[total_marches].vx *= -1;
+        }
+        if (delta_y < 0 && all_bases.marches[total_marches].vy > 0) {
+            all_bases.marches[total_marches].vy *= -1;
+        }
+        if (delta_y > 0 && all_bases.marches[total_marches].vy < 0) {
+            all_bases.marches[total_marches].vy *= -1;
+        }
+        all_bases.marches[total_marches].total_soldiers = all_bases.base_points[*first];
+        all_bases.base_points[*first] = 0;
+        all_bases.being_attacked[*second] = true;
+        all_bases.marches[total_marches].src_index = *first;
+        all_bases.marches[total_marches].des_index = *second;
+        all_bases.marches[total_marches].id = all_bases.base_id[*first];
+        total_marches++;
+        *first = -1;
+        *second = -1;
     }
-    if (delta_x > 0 && all_bases.marches[total_marches].vx < 0) {
-        all_bases.marches[total_marches].vx *= -1;
-    }
-    if (delta_y < 0 && all_bases.marches[total_marches].vy > 0) {
-        all_bases.marches[total_marches].vy *= -1;
-    }
-    if (delta_y > 0 && all_bases.marches[total_marches].vy < 0) {
-        all_bases.marches[total_marches].vy *= -1;
-    }
-    all_bases.marches[total_marches].total_soldiers = all_bases.base_points[*first];
-    all_bases.base_points[*first] = 0;
-    all_bases.being_attacked[*second] = true;
-    all_bases.marches[total_marches].src_index = *first;
-    all_bases.marches[total_marches].des_index = *second;
-    all_bases.marches[total_marches].id = all_bases.base_id[*first];
-    total_marches++;
-    *first = -1;
-    *second = -1;
 }
 
 void bot_movements(int* first, int* second, int index){
@@ -366,11 +364,41 @@ void bot_movements(int* first, int* second, int index){
             }
             else if(i != index && all_bases.base_points[index] >= 20 && all_bases.base_id[i] !=
                     all_bases.base_id[index] && all_bases.being_attacked[i] == false &&
-                    all_bases.base_points[index] > all_bases.base_points[i]+10 && leader_base[0] > 3){
+                    all_bases.base_points[index] > all_bases.base_points[i]+10 && leader_base[0] > 4){
                 *first = index;
                 *second = i;
                 make_attack(first, second);
                 break;
+            }
+            else if(i !=index && point_adder > 1000 && leader_base[0] < 4 && all_bases.base_id[i] == 0xaaffff46 &&
+                    all_bases.being_attacked[i] == false){
+                *first = index;
+                *second = i;
+                make_attack(first, second);
+                break;
+            }
+        }
+    }
+}
+
+void check_accidents(){
+    for(int i = 0;i < total_marches-1;i++){
+        for(int j = i+1;j < total_marches;j++){
+            for(int k = 0;k < 199;k++){
+                for(int z = k+1;z < 200;z++){
+                    if(all_bases.marches[i].is_atk[k] && all_bases.marches[j].is_atk[z] && all_bases.marches[i].id !=
+                       all_bases.marches[j].id) {
+                        if (abs(all_bases.marches[i].x[k] - all_bases.marches[j].x[z]) < 12 &&
+                            abs(all_bases.marches[i].y[k] - all_bases.marches[j].y[z]) < 12) {
+                            all_bases.marches[i].x[k] = 0;
+                            all_bases.marches[i].y[k] = 0;
+                            all_bases.marches[j].x[z] = 0;
+                            all_bases.marches[j].x[z] = 0;
+                            all_bases.marches[i].is_atk[k] = false;
+                            all_bases.marches[j].is_atk[z] = false;
+                        }
+                    }
+                }
             }
         }
     }
@@ -413,13 +441,17 @@ void top_four(SDL_Texture *places_tex, SDL_Rect places_rec){
         }
     }
     int first = -1;
-    for(int i = 3;i >= 0;i--){
-        for(int j = 0;j < 4;j++){
-            if(leader_base[i] < leader_base[j]){
-                break;
-            }
-            else{first = i;}
-        }
+    if(leader_base[0] >= leader_base[1] && leader_base[0] >= leader_base[2] && leader_base[0] >= leader_base[3]){
+        first = 0;
+    }
+    else if(leader_base[1] >= leader_base[0] && leader_base[1] >= leader_base[2] && leader_base[1] >= leader_base[3]){
+        first = 1;
+    }
+    else if(leader_base[2] >= leader_base[0] && leader_base[2] >= leader_base[1] && leader_base[2] >= leader_base[3]){
+        first = 2;
+    }
+    else{
+        first = 3;
     }
     boxColor(sdlRenderer, 83*SCREEN_WIDTH/100, SCREEN_HEIGHT/100, 99*SCREEN_WIDTH/100,
              7*SCREEN_HEIGHT/100, 0xffffffff);

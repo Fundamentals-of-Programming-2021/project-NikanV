@@ -33,9 +33,9 @@ int l = 70;
 int point_adder = 0;
 
 double delta_y, delta_x, theta;
-double speed = 5;
+double speed = 3;
 int total_marches = 0;
-SDL_Texture* points_tex[10];
+SDL_Texture* points_tex;
 
 int leader_base[4];
 
