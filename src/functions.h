@@ -58,9 +58,13 @@ void apply_speed_point();
 
 void stop_speed();
 
+void make_attack(int* first, int* second);
+
+void bot_movements(int* first, int* second, int index);
+
 void selecting_bases(SDL_Event e, int* first, int* second);
 
-void top_four(SDL_Texture *places_tex[4], SDL_Rect places_rec[4]);
+void top_four(SDL_Texture *places_tex, SDL_Rect places_rec);
 
 void check_winner();
 

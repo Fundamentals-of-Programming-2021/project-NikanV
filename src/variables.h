@@ -28,14 +28,15 @@ extern Sint16 x[30][6]; extern Sint16 y[30][6];
 extern int l;
 
 typedef struct march_info{
-    Sint16 x[100];
-    Sint16 y[100];
+    Sint16 x[200];
+    Sint16 y[200];
     double vx;
     double vy;
-    bool is_atk[100];
+    bool is_atk[200];
     int total_soldiers;
     int src_index;
     int des_index;
+    int id;
 }march_info;
 
 typedef struct each_base{
@@ -60,3 +61,4 @@ extern SDL_Texture* points_tex[10];
 extern int leader_base[4];
 
 extern bool pick_easy, pick_medium, pick_hard;
+extern bool won;

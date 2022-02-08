@@ -119,8 +119,9 @@ int main() {
     srand(time(NULL));
     int first = -1, second = -1;
     int ran = rand()%10;
-    SDL_Texture *places_tex[4];
-    SDL_Rect places_rec[4];
+    int bot_ran = rand()%10;
+    SDL_Texture *places_tex;
+    SDL_Rect places_rec;
 
     //logic
     input_struct();
@@ -327,21 +328,14 @@ int main() {
                             xy_maker(85*SCREEN_WIDTH/100, 30*SCREEN_HEIGHT/100, 0);
                             xy_maker(20*SCREEN_WIDTH/100, 20*SCREEN_HEIGHT/100, 1);
                             xy_maker(30*SCREEN_WIDTH/100, 80*SCREEN_HEIGHT/100, 2);
-                            xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
-                                     rand()%(14*SCREEN_HEIGHT/100) + 63*SCREEN_HEIGHT/100, 3);
+                            xy_maker(25*SCREEN_WIDTH/100, 60*SCREEN_HEIGHT/100, 3);
                             //friendly
-                            xy_maker(rand()%(13*SCREEN_WIDTH/100) + 57*SCREEN_WIDTH/100,
-                                     rand()%(10*SCREEN_HEIGHT/100) + 30*SCREEN_HEIGHT/100, 4);
-                            xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
-                                     rand()%(10*SCREEN_HEIGHT/100) + 45*SCREEN_HEIGHT/100, 5);
-                            xy_maker(rand()%(5*SCREEN_WIDTH/100) + 92*SCREEN_WIDTH/100,
-                                     rand()%(14*SCREEN_HEIGHT/100) + 66*SCREEN_HEIGHT/100, 6);
-                            xy_maker(rand()%(12*SCREEN_WIDTH/100) + 28*SCREEN_WIDTH/100,
-                                     rand()%(13*SCREEN_HEIGHT/100) + 12*SCREEN_HEIGHT/100, 7);
-                            xy_maker(rand()%(8*SCREEN_WIDTH/100) + 75*SCREEN_WIDTH/100,
-                                     rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, 8);
-                            xy_maker(rand()%(9*SCREEN_WIDTH/100) + 17*SCREEN_WIDTH/100,
-                                     rand()%(15*SCREEN_HEIGHT/100) + 47*SCREEN_HEIGHT/100, 9);
+                            xy_maker(75*SCREEN_WIDTH/100, 40*SCREEN_HEIGHT/100, 4);
+                            xy_maker(65*SCREEN_WIDTH/100, 50*SCREEN_HEIGHT/100, 5);
+                            xy_maker(65*SCREEN_WIDTH/100, 30*SCREEN_HEIGHT/100, 6);
+                            xy_maker(95*SCREEN_WIDTH/100, 75*SCREEN_HEIGHT/100, 7);
+                            xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
+                            xy_maker(20*SCREEN_WIDTH/100, 40*SCREEN_HEIGHT/100, 9);
 
                         }
                         if(e.button.x >= SCREEN_WIDTH*35/100 && e.button.x <= SCREEN_WIDTH*65/100 &&
@@ -350,6 +344,17 @@ int main() {
                             goto_game = true;
                             pick_medium = true;
                             goto_diff_pick = false;
+                            xy_maker(55*SCREEN_WIDTH/100, 60*SCREEN_HEIGHT/100, 0);
+                            xy_maker(80*SCREEN_WIDTH/100, 20*SCREEN_HEIGHT/100, 1);
+                            xy_maker(25*SCREEN_WIDTH/100, 30*SCREEN_HEIGHT/100, 2);
+                            xy_maker(30*SCREEN_WIDTH/100, 65*SCREEN_HEIGHT/100, 3);
+                            //friendly
+                            xy_maker(40*SCREEN_WIDTH/100, 20*SCREEN_HEIGHT/100, 4);
+                            xy_maker(65*SCREEN_WIDTH/100, 50*SCREEN_HEIGHT/100, 5);
+                            xy_maker(65*SCREEN_WIDTH/100, 30*SCREEN_HEIGHT/100, 6);
+                            xy_maker(85*SCREEN_WIDTH/100, 55*SCREEN_HEIGHT/100, 7);
+                            xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
+                            xy_maker(20*SCREEN_WIDTH/100, 45*SCREEN_HEIGHT/100, 9);
                         }
                         if(e.button.x >= SCREEN_WIDTH*35/100 && e.button.x <= SCREEN_WIDTH*65/100 &&
                            e.button.y >= SCREEN_HEIGHT*55/100 && e.button.y <= SCREEN_HEIGHT*65/100){
@@ -357,6 +362,17 @@ int main() {
                             goto_game = true;
                             pick_hard = true;
                             goto_diff_pick = false;
+                            xy_maker(15*SCREEN_WIDTH/100, 40*SCREEN_HEIGHT/100, 0);
+                            xy_maker(30*SCREEN_WIDTH/100, 20*SCREEN_HEIGHT/100, 1);
+                            xy_maker(30*SCREEN_WIDTH/100, 80*SCREEN_HEIGHT/100, 2);
+                            xy_maker(65*SCREEN_WIDTH/100, 50*SCREEN_HEIGHT/100, 3);
+                            //friendly
+                            xy_maker(40*SCREEN_WIDTH/100, 25*SCREEN_HEIGHT/100, 4);
+                            xy_maker(55*SCREEN_WIDTH/100, 50*SCREEN_HEIGHT/100, 5);
+                            xy_maker(65*SCREEN_WIDTH/100, 30*SCREEN_HEIGHT/100, 6);
+                            xy_maker(85*SCREEN_WIDTH/100, 45*SCREEN_HEIGHT/100, 7);
+                            xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
+                            xy_maker(30*SCREEN_WIDTH/100, 60*SCREEN_HEIGHT/100, 9);
                         }
                         break;
                     default:
@@ -372,6 +388,8 @@ int main() {
             SDL_RenderCopy(sdlRenderer, map, NULL, &map_rec);
 
             point_adder++;
+            bot_ran++;
+            bot_ran %= 10;
             draw_map();
             make_march();
             draw_march();
@@ -379,6 +397,7 @@ int main() {
             stop_speed();
             top_four(places_tex, places_rec);
             check_winner();
+            bot_movements(&first, &second, bot_ran);
 
             SDL_Event e;
             while(SDL_PollEvent(&e)) {
@@ -439,8 +458,9 @@ int main() {
     SDL_DestroyTexture(easy);
     SDL_DestroyTexture(medium);
     SDL_DestroyTexture(hard);
-    for(int i = 0;i < 4;i++) {
-        SDL_DestroyTexture(places_tex[i]);
+    SDL_DestroyTexture(places_tex);
+    for(int i = 0;i < 10;i++){
+        SDL_DestroyTexture(points_tex[i]);
     }
 
 

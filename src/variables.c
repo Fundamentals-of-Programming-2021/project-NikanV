@@ -31,6 +31,7 @@ Sint16 x[30][6]; Sint16 y[30][6];
 each_base all_bases;
 int l = 70;
 int point_adder = 0;
+
 double delta_y, delta_x, theta;
 double speed = 5;
 int total_marches = 0;
@@ -39,3 +40,4 @@ SDL_Texture* points_tex[10];
 int leader_base[4];
 
 bool pick_easy = false, pick_medium = false, pick_hard = false;
+bool won = false;
