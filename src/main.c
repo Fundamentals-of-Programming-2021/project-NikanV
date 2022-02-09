@@ -123,7 +123,7 @@ int main() {
     int bot_ran = rand()%10;
     SDL_Texture *places_tex;
     SDL_Rect places_rec;
-
+    potion_ran = rand()%4;
 
     get_all_usernames();
 
@@ -446,18 +446,22 @@ int main() {
             if(point_adder == 1000000){
                 point_adder = 0;
             }
+            potion_ran = 0;
             draw_map();
+            //make_potion();
             make_march();
             draw_march();
+            check_accidents();
             apply_speed_point();
             stop_speed();
-            top_four(places_tex, places_rec);
+            if(show_top_four) {
+                top_four(places_tex, places_rec);
+            }
             check_winner();
             if(point_adder%100 == 0) {
                 bot_movements(&first, &second, bot_ran);
             }
-            check_accidents();
-            bot_ran  = rand()%10;
+            bot_ran = rand()%10;
 
             SDL_Event e;
             while(SDL_PollEvent(&e)) {
@@ -469,6 +473,10 @@ int main() {
                     case SDL_MOUSEBUTTONDOWN:
                         selecting_bases(e, &first, &second);
                         break;
+                    case SDL_KEYDOWN:
+                        if(e.key.keysym.sym == SDLK_TAB){
+                            show_top_four = !show_top_four;
+                        }
                     default:
                         break;
                 }

@@ -3,7 +3,7 @@ set(PROJECT_NAME Fop_project)
 
 cmake_minimum_required(VERSION 3.21)
 project(${PROJECT_NAME} C)
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 
 file(GLOB_RECURSE SOURCE "src/*.c" "src/*.h")
 add_executable("${PROJECT_NAME}" "${SOURCE}")

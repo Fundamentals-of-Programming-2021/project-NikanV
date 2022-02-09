@@ -24,6 +24,7 @@ SDL_bool goto_map_picker = false;
 SDL_bool goto_diff_pick = false;
 SDL_bool goto_winner = false;
 SDL_bool goto_leaderboard = false;
+SDL_bool show_top_four = false;
 
 
 
@@ -52,3 +53,7 @@ int leader_base[4];
 
 bool pick_easy = false, pick_medium = false, pick_hard = false;
 bool won = false;
+
+int potion_ran = 0;
+bool potion_active = false;
+char number[5];

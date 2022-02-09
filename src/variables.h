@@ -24,6 +24,7 @@ extern SDL_bool goto_map_picker;
 extern SDL_bool goto_diff_pick;
 extern SDL_bool goto_winner;
 extern SDL_bool goto_leaderboard;
+extern SDL_bool show_top_four;
 
 extern Sint16 x[30][6]; extern Sint16 y[30][6];
 extern int l;
@@ -59,7 +60,7 @@ typedef struct player{
 typedef struct potions{
     Sint16 x[4];
     Sint16 y[4];
-    int index[4];
+    int id[4];
     bool is_active[4];
     int timer[4];
 }potions;
@@ -85,3 +86,9 @@ extern int leader_base[4];
 
 extern bool pick_easy, pick_medium, pick_hard;
 extern bool won;
+
+extern int potion_ran;
+
+extern bool potion_active;
+
+extern char number[5];

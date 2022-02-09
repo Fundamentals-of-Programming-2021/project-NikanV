@@ -85,3 +85,5 @@ int comp(const void*, const void*);
 void rmv_duplicate();
 
 void add_player();
+
+void make_potion();

@@ -93,16 +93,15 @@ void input_struct(){
     all_bases.base_id[2] = 0xaae81815;
     all_bases.base_id[3] = 0xaa7a0a53;
     for(int i = 0;i < 4;i++){
-        all_potions.x[i] = (all_bases.base_x[i+2]+all_bases.base_x[i+4])/2;
-        all_potions.y[i] = (all_bases.base_y[i+2]+all_bases.base_y[i+4])/2;
+        all_potions.x[i] = 0;
+        all_potions.y[i] = 0;
         all_potions.is_active[i] = false;
-        all_potions.index[i] = -1;
+        all_potions.id[i] = -1;
         all_potions.timer[i] = -1;
     }
 }
 
 void draw_map(){
-    char* number = (char*)malloc(sizeof(char)*10);
     for(int i = 0;i < 10;i++){
         if(i == 0){
             filledPolygonColor(sdlRenderer, x[i], y[i], 6, all_bases.base_id[i]);
@@ -148,23 +147,38 @@ void draw_map(){
                           number, &points_tex,&points_rec);
         SDL_RenderCopy(sdlRenderer, points_tex, NULL, &points_rec);
     }
-    free(number);
-    potions_rec.x = all_potions.x[0]; potions_rec.y = all_potions.y[0];
-    potions_rec.w = 50; potions_rec.h = 50;
-    get_img_and_rect("../images/potion1.png", &potions_tex);
-    SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
-    potions_rec.x = all_potions.x[1]; potions_rec.y = all_potions.y[1];
-    potions_rec.w = 50; potions_rec.h = 50;
-    get_img_and_rect("../images/potion2.png", &potions_tex);
-    SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
-    potions_rec.x = all_potions.x[2]; potions_rec.y = all_potions.y[2];
-    potions_rec.w = 50; potions_rec.h = 50;
-    get_img_and_rect("../images/potion3.png", &potions_tex);
-    SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
-    potions_rec.x = all_potions.x[3]; potions_rec.y = all_potions.y[3];
-    potions_rec.w = 50; potions_rec.h = 50;
-    get_img_and_rect("../images/potion4.png", &potions_tex);
-    SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    if(all_potions.is_active[0]) {
+        potions_rec.x = all_potions.x[0];
+        potions_rec.y = all_potions.y[0];
+        potions_rec.w = 50;
+        potions_rec.h = 50;
+        get_img_and_rect("../images/potion1.png", &potions_tex);
+        SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    }
+    else if(all_potions.is_active[1]) {
+        potions_rec.x = all_potions.x[1];
+        potions_rec.y = all_potions.y[1];
+        potions_rec.w = 50;
+        potions_rec.h = 50;
+        get_img_and_rect("../images/potion2.png", &potions_tex);
+        SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    }
+    else if(all_potions.is_active[2]) {
+        potions_rec.x = all_potions.x[2];
+        potions_rec.y = all_potions.y[2];
+        potions_rec.w = 50;
+        potions_rec.h = 50;
+        get_img_and_rect("../images/potion3.png", &potions_tex);
+        SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    }
+    else if(all_potions.is_active[3]) {
+        potions_rec.x = all_potions.x[3];
+        potions_rec.y = all_potions.y[3];
+        potions_rec.w = 50;
+        potions_rec.h = 50;
+        get_img_and_rect("../images/potion4.png", &potions_tex);
+        SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    }
 }
 
 void draw_start(SDL_Texture* start_bg_tex, SDL_Texture* logo_tex, SDL_Texture* name_tex, SDL_Texture* input_tex,
@@ -407,8 +421,8 @@ void bot_movements(int* first, int* second, int index){
 void check_accidents(){
     for(int i = 0;i < total_marches-1;i++){
         for(int j = i+1;j < total_marches;j++){
-            for(int k = 0;k < 199;k++){
-                for(int z = k+1;z < 200;z++){
+            for(int k = 0;k < 200;k++){
+                for(int z = k;z < 200;z++){
                     if(all_bases.marches[i].is_atk[k] && all_bases.marches[j].is_atk[z] && all_bases.marches[i].id !=
                        all_bases.marches[j].id) {
                         if (abs(all_bases.marches[i].x[k] - all_bases.marches[j].x[z]) < 14 &&
@@ -445,7 +459,6 @@ void selecting_bases(SDL_Event e, int* first, int* second){
 }
 
 void top_four(SDL_Texture *places_tex, SDL_Rect places_rec){
-    char* number = (char*)malloc(sizeof (char)*5);
     for(int i = 0;i < 4;i++){
         leader_base[i] = 0;
     }
@@ -520,7 +533,6 @@ void top_four(SDL_Texture *places_tex, SDL_Rect places_rec){
                           &places_rec);
         SDL_RenderCopy(sdlRenderer, places_tex, NULL, &places_rec);
     }
-    free(number);
 }
 
 void check_winner(){
@@ -626,4 +638,209 @@ void add_player(){
     all_players[count_players] = create_player();
     count_players++;
     sort_players();
+}
+
+void make_potion(){
+    int tmp_ran1 = rand()%10, tmp_ran2 = (tmp_ran1+3)%10;
+    switch (potion_ran) {
+        case 0:
+            if(!all_potions.is_active[potion_ran] && !potion_active){
+                all_potions.x[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_x[tmp_ran2])/2;
+                all_potions.y[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                for(int i = 0;i < total_marches;i++){
+                    for(int j = 0;j < 200;j++){
+                        if(abs(all_bases.marches[i].x[j] - all_potions.x[potion_ran]) < 50 &&
+                                abs(all_bases.marches[i].y[j] - all_potions.y[potion_ran]) < 50){
+                            all_potions.is_active[potion_ran] = true;
+                            all_potions.timer[potion_ran] = 10;
+                            all_potions.id[potion_ran] = all_bases.marches[i].id;
+                            for(int k = 0;k < total_marches;k++){
+                                if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                                    all_bases.marches[k].vx *= 2;
+                                    all_bases.marches[k].vy *= 2;
+                                }
+                            }
+                            potion_ran++;
+                            potion_ran %= 4;
+                            potion_active = true;
+                            return;
+                        }
+                    }
+                }
+            }
+            else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
+                for(int k = 0;k < total_marches;k++){
+                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                        all_bases.marches[k].vx *= 2;
+                        all_bases.marches[k].vy *= 2;
+                    }
+                }
+                if(point_adder%30 == 0){
+                    all_potions.timer[potion_ran]--;
+                }
+            }
+            else if(all_potions.timer[potion_ran] == 0){
+                all_potions.is_active[potion_ran] = false;
+                all_potions.timer[potion_ran] = -1;
+                all_potions.id[potion_ran] = -1;
+                for(int k = 0;k < total_marches;k++){
+                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                        all_bases.marches[k].vx *= 1/2;
+                        all_bases.marches[k].vy *= 1/2;
+                    }
+                }
+                potion_active = false;
+            }
+            break;
+        case 1:
+            if(!all_potions.is_active[potion_ran] && !potion_active){
+                all_potions.x[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_x[tmp_ran2])/2;
+                all_potions.y[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                for(int i = 0;i < total_marches;i++){
+                    for(int j = 0;j < 200;j++){
+                        if(abs(all_bases.marches[i].x[j] - all_potions.x[potion_ran]) < 50 &&
+                           abs(all_bases.marches[i].y[j] - all_potions.y[potion_ran]) < 50){
+                            all_potions.is_active[potion_ran] = true;
+                            all_potions.timer[potion_ran] = 10;
+                            all_potions.id[potion_ran] = all_bases.marches[i].id;
+                            for(int k = 0;k < total_marches;k++){
+                                if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                                    all_bases.marches[k].vx *= 2;
+                                    all_bases.marches[k].vy *= 2;
+                                }
+                            }
+                            potion_ran++;
+                            potion_ran %= 4;
+                            potion_active = true;
+                            return;
+                        }
+                    }
+                }
+            }
+            else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
+                for(int k = 0;k < total_marches;k++){
+                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                        all_bases.marches[k].vx *= 2;
+                        all_bases.marches[k].vy *= 2;
+                    }
+                }
+                if(point_adder%30 == 0){
+                    all_potions.timer[potion_ran]--;
+                }
+            }
+            else if(all_potions.timer[potion_ran] == 0){
+                all_potions.is_active[potion_ran] = false;
+                all_potions.timer[potion_ran] = -1;
+                all_potions.id[potion_ran] = -1;
+                for(int k = 0;k < total_marches;k++){
+                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                        all_bases.marches[k].vx *= 1/2;
+                        all_bases.marches[k].vy *= 1/2;
+                    }
+                }
+                potion_active = false;
+            }
+            break;
+        case 2:
+            if(!all_potions.is_active[potion_ran] && !potion_active){
+                all_potions.x[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_x[tmp_ran2])/2;
+                all_potions.y[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                for(int i = 0;i < total_marches;i++){
+                    for(int j = 0;j < 200;j++){
+                        if(abs(all_bases.marches[i].x[j] - all_potions.x[potion_ran]) < 50 &&
+                           abs(all_bases.marches[i].y[j] - all_potions.y[potion_ran]) < 50){
+                            all_potions.is_active[potion_ran] = true;
+                            all_potions.timer[potion_ran] = 10;
+                            all_potions.id[potion_ran] = all_bases.marches[i].id;
+                            for(int k = 0;k < total_marches;k++){
+                                if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                                    all_bases.marches[k].vx *= 2;
+                                    all_bases.marches[k].vy *= 2;
+                                }
+                            }
+                            potion_ran++;
+                            potion_ran %= 4;
+                            potion_active = true;
+                            return;
+                        }
+                    }
+                }
+            }
+            else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
+                for(int k = 0;k < total_marches;k++){
+                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                        all_bases.marches[k].vx *= 2;
+                        all_bases.marches[k].vy *= 2;
+                    }
+                }
+                if(point_adder%30 == 0){
+                    all_potions.timer[potion_ran]--;
+                }
+            }
+            else if(all_potions.timer[potion_ran] == 0){
+                all_potions.is_active[potion_ran] = false;
+                all_potions.timer[potion_ran] = -1;
+                all_potions.id[potion_ran] = -1;
+                for(int k = 0;k < total_marches;k++){
+                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                        all_bases.marches[k].vx *= 1/2;
+                        all_bases.marches[k].vy *= 1/2;
+                    }
+                }
+                potion_active = false;
+            }
+            break;
+        case 3:
+            if(!all_potions.is_active[potion_ran] && !potion_active){
+                all_potions.x[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_x[tmp_ran2])/2;
+                all_potions.y[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                for(int i = 0;i < total_marches;i++){
+                    for(int j = 0;j < 200;j++){
+                        if(abs(all_bases.marches[i].x[j] - all_potions.x[potion_ran]) < 50 &&
+                           abs(all_bases.marches[i].y[j] - all_potions.y[potion_ran]) < 50){
+                            all_potions.is_active[potion_ran] = true;
+                            all_potions.timer[potion_ran] = 10;
+                            all_potions.id[potion_ran] = all_bases.marches[i].id;
+                            for(int k = 0;k < total_marches;k++){
+                                if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                                    all_bases.marches[k].vx *= 2;
+                                    all_bases.marches[k].vy *= 2;
+                                }
+                            }
+                            potion_ran++;
+                            potion_ran %= 4;
+                            potion_active = true;
+                            return;
+                        }
+                    }
+                }
+            }
+            else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
+                for(int k = 0;k < total_marches;k++){
+                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                        all_bases.marches[k].vx *= 2;
+                        all_bases.marches[k].vy *= 2;
+                    }
+                }
+                if(point_adder%30 == 0){
+                    all_potions.timer[potion_ran]--;
+                }
+            }
+            else if(all_potions.timer[potion_ran] == 0){
+                all_potions.is_active[potion_ran] = false;
+                all_potions.timer[potion_ran] = -1;
+                all_potions.id[potion_ran] = -1;
+                for(int k = 0;k < total_marches;k++){
+                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
+                        all_bases.marches[k].vx *= 1/2;
+                        all_bases.marches[k].vy *= 1/2;
+                    }
+                }
+                potion_active = false;
+            }
+            break;
+        default:
+        break;
+    }
+
 }
