@@ -92,12 +92,18 @@ void input_struct(){
     all_bases.base_id[1] = 0xaaf010ff;
     all_bases.base_id[2] = 0xaae81815;
     all_bases.base_id[3] = 0xaa7a0a53;
+    for(int i = 0;i < 4;i++){
+        all_potions.x[i] = (all_bases.base_x[i+2]+all_bases.base_x[i+4])/2;
+        all_potions.y[i] = (all_bases.base_y[i+2]+all_bases.base_y[i+4])/2;
+        all_potions.is_active[i] = false;
+        all_potions.index[i] = -1;
+        all_potions.timer[i] = -1;
+    }
 }
 
 void draw_map(){
-    char number[5];
+    char* number = (char*)malloc(sizeof(char)*10);
     for(int i = 0;i < 10;i++){
-        SDL_Rect points_rec;
         if(i == 0){
             filledPolygonColor(sdlRenderer, x[i], y[i], 6, all_bases.base_id[i]);
             polygonColor(sdlRenderer, x[i], y[i], 6, 0xff000000);
@@ -142,6 +148,23 @@ void draw_map(){
                           number, &points_tex,&points_rec);
         SDL_RenderCopy(sdlRenderer, points_tex, NULL, &points_rec);
     }
+    free(number);
+    potions_rec.x = all_potions.x[0]; potions_rec.y = all_potions.y[0];
+    potions_rec.w = 50; potions_rec.h = 50;
+    get_img_and_rect("../images/potion1.png", &potions_tex);
+    SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    potions_rec.x = all_potions.x[1]; potions_rec.y = all_potions.y[1];
+    potions_rec.w = 50; potions_rec.h = 50;
+    get_img_and_rect("../images/potion2.png", &potions_tex);
+    SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    potions_rec.x = all_potions.x[2]; potions_rec.y = all_potions.y[2];
+    potions_rec.w = 50; potions_rec.h = 50;
+    get_img_and_rect("../images/potion3.png", &potions_tex);
+    SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    potions_rec.x = all_potions.x[3]; potions_rec.y = all_potions.y[3];
+    potions_rec.w = 50; potions_rec.h = 50;
+    get_img_and_rect("../images/potion4.png", &potions_tex);
+    SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
 }
 
 void draw_start(SDL_Texture* start_bg_tex, SDL_Texture* logo_tex, SDL_Texture* name_tex, SDL_Texture* input_tex,
@@ -422,7 +445,7 @@ void selecting_bases(SDL_Event e, int* first, int* second){
 }
 
 void top_four(SDL_Texture *places_tex, SDL_Rect places_rec){
-    char number[5];
+    char* number = (char*)malloc(sizeof (char)*5);
     for(int i = 0;i < 4;i++){
         leader_base[i] = 0;
     }
@@ -497,6 +520,7 @@ void top_four(SDL_Texture *places_tex, SDL_Rect places_rec){
                           &places_rec);
         SDL_RenderCopy(sdlRenderer, places_tex, NULL, &places_rec);
     }
+    free(number);
 }
 
 void check_winner(){
@@ -565,7 +589,7 @@ int comp(const void* first, const void* second){
 
 void sort_players(){
     qsort(all_players, count_players, sizeof(player), comp);
-    for(int i = 0;i < count_players;i++){
+    for(int i = 0;i <= count_players;i++){
         all_players[i].ranking = i+1;
     }
 }
@@ -579,15 +603,15 @@ int comp_duplicate(const void* first, const void* second){
 
 void rmv_duplicate(){
     for(int i = 0;i <= count_players;i++){
-        if(!strcmp(all_players[i].username, all_players[i+1].username)){
-            if(all_players[i].total_pt != 0){
+        if (!strcmp(all_players[i].username, all_players[i+1].username)) {
+            if (all_players[i].total_pt != 0) {
                 strcpy(all_players[i+1].username, "\0");
-            }
-            else{
+            } else {
                 strcpy(all_players[i].username, "\0");
             }
         }
-        qsort(all_players, count_players+1, sizeof(player), comp_duplicate);
+        qsort(all_players, count_players + 1, sizeof(player), comp);
+        qsort(all_players, count_players + 1, sizeof(player), comp_duplicate);
     }
     int tmp_count = count_players;
     for(int i = tmp_count; i >= 0;i--){

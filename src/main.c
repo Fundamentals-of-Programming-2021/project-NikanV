@@ -124,9 +124,6 @@ int main() {
     SDL_Texture *places_tex;
     SDL_Rect places_rec;
 
-    //logic
-    input_struct();
-
 
     get_all_usernames();
 
@@ -337,6 +334,7 @@ int main() {
                                      rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, (ran+8)%10);
                             xy_maker(rand()%(9*SCREEN_WIDTH/100) + 17*SCREEN_WIDTH/100,
                                      rand()%(15*SCREEN_HEIGHT/100) + 47*SCREEN_HEIGHT/100, (ran+9)%10);
+                            input_struct();
                         }
                         else if(e.button.x >= SCREEN_WIDTH*20/100 && e.button.x <= SCREEN_WIDTH*80/100 &&
                                 e.button.y >= SCREEN_HEIGHT*40/100 && e.button.y <= SCREEN_HEIGHT*50/100){
@@ -390,6 +388,7 @@ int main() {
                             xy_maker(95*SCREEN_WIDTH/100, 75*SCREEN_HEIGHT/100, 7);
                             xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
                             xy_maker(20*SCREEN_WIDTH/100, 40*SCREEN_HEIGHT/100, 9);
+                            input_struct();
 
                         }
                         if(e.button.x >= SCREEN_WIDTH*35/100 && e.button.x <= SCREEN_WIDTH*65/100 &&
@@ -409,6 +408,7 @@ int main() {
                             xy_maker(85*SCREEN_WIDTH/100, 55*SCREEN_HEIGHT/100, 7);
                             xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
                             xy_maker(20*SCREEN_WIDTH/100, 45*SCREEN_HEIGHT/100, 9);
+                            input_struct();
                         }
                         if(e.button.x >= SCREEN_WIDTH*35/100 && e.button.x <= SCREEN_WIDTH*65/100 &&
                            e.button.y >= SCREEN_HEIGHT*55/100 && e.button.y <= SCREEN_HEIGHT*65/100){
@@ -427,6 +427,7 @@ int main() {
                             xy_maker(85*SCREEN_WIDTH/100, 45*SCREEN_HEIGHT/100, 7);
                             xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
                             xy_maker(30*SCREEN_WIDTH/100, 60*SCREEN_HEIGHT/100, 9);
+                            input_struct();
                         }
                         break;
                     default:
@@ -453,7 +454,7 @@ int main() {
             top_four(places_tex, places_rec);
             check_winner();
             if(point_adder%100 == 0) {
-                //bot_movements(&first, &second, bot_ran);
+                bot_movements(&first, &second, bot_ran);
             }
             check_accidents();
             bot_ran  = rand()%10;

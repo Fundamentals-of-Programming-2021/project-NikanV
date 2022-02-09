@@ -56,16 +56,30 @@ typedef struct player{
     int total_pt;
 }player;
 
+typedef struct potions{
+    Sint16 x[4];
+    Sint16 y[4];
+    int index[4];
+    bool is_active[4];
+    int timer[4];
+}potions;
+
 extern player all_players[100];
 extern int count_players;
 
 extern each_base all_bases;
 extern int point_adder;
 
+extern potions all_potions;
+
 extern double delta_y, delta_x, theta;
 extern double speed;
 extern int total_marches;
 extern SDL_Texture* points_tex;
+extern SDL_Rect points_rec;
+
+extern SDL_Texture* potions_tex;
+extern SDL_Rect potions_rec;
 
 extern int leader_base[4];
 

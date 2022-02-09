@@ -31,6 +31,9 @@ Sint16 x[30][6]; Sint16 y[30][6];
 
 each_base all_bases;
 player all_players[100];
+
+potions all_potions;
+
 int l = 70;
 int point_adder = 0;
 
@@ -40,6 +43,10 @@ double delta_y, delta_x, theta;
 double speed = 3;
 int total_marches = 0;
 SDL_Texture* points_tex;
+SDL_Rect points_rec;
+
+SDL_Texture* potions_tex;
+SDL_Rect potions_rec;
 
 int leader_base[4];
 
