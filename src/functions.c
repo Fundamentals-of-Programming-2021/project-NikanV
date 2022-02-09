@@ -388,8 +388,8 @@ void check_accidents(){
                 for(int z = k+1;z < 200;z++){
                     if(all_bases.marches[i].is_atk[k] && all_bases.marches[j].is_atk[z] && all_bases.marches[i].id !=
                        all_bases.marches[j].id) {
-                        if (abs(all_bases.marches[i].x[k] - all_bases.marches[j].x[z]) < 12 &&
-                            abs(all_bases.marches[i].y[k] - all_bases.marches[j].y[z]) < 12) {
+                        if (abs(all_bases.marches[i].x[k] - all_bases.marches[j].x[z]) < 14 &&
+                            abs(all_bases.marches[i].y[k] - all_bases.marches[j].y[z]) < 14) {
                             all_bases.marches[i].x[k] = 0;
                             all_bases.marches[i].y[k] = 0;
                             all_bases.marches[j].x[z] = 0;
@@ -516,4 +516,90 @@ void check_winner(){
         goto_game = false;
         goto_winner = true;
     }
+}
+
+void add_point(){
+
+}
+
+void get_all_usernames(){
+    FILE* f = fopen("username.txt", "r");
+    if(f == NULL){fprintf(stderr, "couldn't open username file");
+        exit(1);
+    }
+    for(int i = 0;!feof(f);i++){
+        fscanf(f, "%d %d %[^\n]s", &all_players[i].total_pt, &all_players[i].ranking,
+               all_players[i].username);
+        count_players = i;
+    }
+    fclose(f);
+}
+
+void put_in_file(){
+    remove("username.txt");
+    FILE* f = fopen("username.txt", "w");
+    if(f == NULL){fprintf(stderr, "couldn't open username file");
+        exit(1);
+    }
+    for(int i = 0;i <= count_players;i++){
+        fprintf(f, "%d %d %s\n", all_players[i].total_pt, all_players[i].ranking,
+               all_players[i].username);
+    }
+    fclose(f);
+}
+
+player create_player(){
+    player new_player;
+    strcpy(new_player.username, username);
+    new_player.ranking = 0;
+    new_player.total_pt = 0;
+    return new_player;
+}
+
+int comp(const void* first, const void* second){
+    player* p1 = (player*)first;
+    player* p2 = (player*)second;
+
+ return p2->total_pt - p1->total_pt;
+}
+
+void sort_players(){
+    qsort(all_players, count_players, sizeof(player), comp);
+    for(int i = 0;i < count_players;i++){
+        all_players[i].ranking = i+1;
+    }
+}
+
+int comp_duplicate(const void* first, const void* second){
+    player* p1 = (player*)first;
+    player* p2 = (player*)second;
+
+ return strcmp(p2->username, p1->username);
+}
+
+void rmv_duplicate(){
+    for(int i = 0;i <= count_players;i++){
+        if(!strcmp(all_players[i].username, all_players[i+1].username)){
+            if(all_players[i].total_pt != 0){
+                strcpy(all_players[i+1].username, "\0");
+            }
+            else{
+                strcpy(all_players[i].username, "\0");
+            }
+        }
+        qsort(all_players, count_players+1, sizeof(player), comp_duplicate);
+    }
+    int tmp_count = count_players;
+    for(int i = tmp_count; i >= 0;i--){
+        if(!strcmp(all_players[i].username, "\0")){
+            count_players--;
+            break;
+        }
+    }
+}
+
+void add_player(){
+    all_players[count_players] = create_player();
+    count_players++;
+    sort_players();
 }

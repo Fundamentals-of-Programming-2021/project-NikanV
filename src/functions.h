@@ -70,3 +70,18 @@ void top_four(SDL_Texture *places_tex, SDL_Rect places_rec);
 
 void check_winner();
 
+void add_point();
+
+void get_all_usernames();
+
+void sort_players();
+
+void put_in_file();
+
+struct player create_player();
+
+int comp(const void*, const void*);
+
+void rmv_duplicate();
+
+void add_player();

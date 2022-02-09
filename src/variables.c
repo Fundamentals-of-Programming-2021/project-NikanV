@@ -22,15 +22,19 @@ SDL_bool goto_main_menu = false;
 SDL_bool goto_game = false;
 SDL_bool goto_map_picker = false;
 SDL_bool goto_diff_pick = false;
-SDL_bool goto_winner;
+SDL_bool goto_winner = false;
+SDL_bool goto_leaderboard = false;
 
 
 
 Sint16 x[30][6]; Sint16 y[30][6];
 
 each_base all_bases;
+player all_players[100];
 int l = 70;
 int point_adder = 0;
+
+int count_players = 0;
 
 double delta_y, delta_x, theta;
 double speed = 3;

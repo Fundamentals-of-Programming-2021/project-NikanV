@@ -23,6 +23,7 @@ extern SDL_bool goto_game;
 extern SDL_bool goto_map_picker;
 extern SDL_bool goto_diff_pick;
 extern SDL_bool goto_winner;
+extern SDL_bool goto_leaderboard;
 
 extern Sint16 x[30][6]; extern Sint16 y[30][6];
 extern int l;
@@ -49,6 +50,14 @@ typedef struct each_base{
     struct march_info marches[300];
 }each_base;
 
+typedef struct player{
+    char username[15];
+    int ranking;
+    int total_pt;
+}player;
+
+extern player all_players[100];
+extern int count_players;
 
 extern each_base all_bases;
 extern int point_adder;
