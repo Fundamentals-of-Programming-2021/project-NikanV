@@ -458,9 +458,8 @@ int main() {
                 top_four(places_tex, places_rec);
             }
             check_winner();
-            if(point_adder%100 == 0) {
-                bot_movements(&first, &second, bot_ran);
-            }
+            bot_movements(&first, &second, bot_ran);
+
             bot_ran = rand()%10;
 
             SDL_Event e;

@@ -48,7 +48,7 @@ typedef struct each_base{
     int points_speed[10];
     int base_id[10];
     bool being_attacked[10];
-    struct march_info marches[300];
+    struct march_info marches[100];
 }each_base;
 
 typedef struct player{
@@ -70,6 +70,8 @@ extern int count_players;
 
 extern each_base all_bases;
 extern int point_adder;
+
+extern bool marches_state[100];
 
 extern potions all_potions;
 

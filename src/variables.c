@@ -43,6 +43,7 @@ int count_players = 0;
 double delta_y, delta_x, theta;
 double speed = 3;
 int total_marches = 0;
+bool marches_state[100];
 SDL_Texture* points_tex;
 SDL_Rect points_rec;
 
