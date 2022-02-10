@@ -213,6 +213,10 @@ int main() {
                         else if(e.button.x >= SCREEN_WIDTH*30/100 && e.button.x <= SCREEN_WIDTH*70/100 &&
                                 e.button.y >= SCREEN_HEIGHT*40/100 && e.button.y <= SCREEN_HEIGHT*50/100){
                             //continue
+                            goto_game = true;
+                            goto_main_menu = false;
+                            read_old_map();
+                            input_struct();
                         }
                         else if(e.button.x >= SCREEN_WIDTH*25/100 && e.button.x <= SCREEN_WIDTH*75/100 &&
                                 e.button.y >= SCREEN_HEIGHT*55/100 && e.button.y <= SCREEN_HEIGHT*65/100){
@@ -388,15 +392,8 @@ int main() {
             SDL_RenderClear(sdlRenderer);
             SDL_RenderCopy(sdlRenderer, map, NULL, &map_rec);
 
-            draw_map();
-            make_march();
-            draw_march();
-            check_accidents();
-            make_potion();
-            apply_speed_point();
-            stop_speed();
-            bot_movements(bot_ran);
-            check_winner();
+            draw_map(); make_march(); draw_march(); check_accidents(); make_potion();
+            apply_speed_point(); stop_speed(); bot_movements(bot_ran); check_winner();
             if(show_top_four) {
                 top_four(places_tex, places_rec);
             }

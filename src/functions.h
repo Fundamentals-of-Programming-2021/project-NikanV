@@ -102,3 +102,7 @@ void sort_players();
 void add_point_to_player(int point);
 
 void put_all_usernames_in_file();
+
+void read_old_map();
+
+void save_map();

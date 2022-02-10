@@ -23,29 +23,15 @@ void destroy_all(SDL_Texture *start_bg_tex, SDL_Texture *main_menu_bg_tex, SDL_T
                  SDL_Texture *con_game, SDL_Texture *leaderboard, SDL_Texture *back, SDL_Texture *map,
                  SDL_Texture *random_map_tex, SDL_Texture *choose_dif_tex, SDL_Texture *easy, SDL_Texture *medium,
                  SDL_Texture *hard, SDL_Texture *places_tex,SDL_Texture *leaderboard_player, SDL_Texture *back_to_menu){
-    SDL_DestroyTexture(start_bg_tex);
-    SDL_DestroyTexture(main_menu_bg_tex);
-    SDL_DestroyTexture(logo_tex);
-    SDL_DestroyTexture(name_tex);
-    SDL_DestroyTexture(submit_button);
-    SDL_DestroyTexture(ingame_name);
-    SDL_DestroyTexture(input_tex);
-    SDL_DestroyTexture(new_game);
-    SDL_DestroyTexture(con_game);
-    SDL_DestroyTexture(leaderboard);
-    SDL_DestroyTexture(back);
-    SDL_DestroyTexture(map);
-    SDL_DestroyTexture(random_map_tex);
-    SDL_DestroyTexture(choose_dif_tex);
-    SDL_DestroyTexture(easy);
-    SDL_DestroyTexture(medium);
-    SDL_DestroyTexture(hard);
-    SDL_DestroyTexture(places_tex);
-    SDL_DestroyTexture(leaderboard_player);
-    SDL_DestroyTexture(back_to_menu);
-    SDL_DestroyTexture(points_tex);
-    SDL_DestroyTexture(potions_tex);
-    SDL_DestroyTexture(congrats);
+    SDL_DestroyTexture(start_bg_tex); SDL_DestroyTexture(main_menu_bg_tex);
+    SDL_DestroyTexture(logo_tex); SDL_DestroyTexture(name_tex); SDL_DestroyTexture(submit_button);
+    SDL_DestroyTexture(ingame_name); SDL_DestroyTexture(input_tex); SDL_DestroyTexture(new_game);
+    SDL_DestroyTexture(con_game); SDL_DestroyTexture(leaderboard); SDL_DestroyTexture(back);
+    SDL_DestroyTexture(map); SDL_DestroyTexture(random_map_tex); SDL_DestroyTexture(choose_dif_tex);
+    SDL_DestroyTexture(easy); SDL_DestroyTexture(medium); SDL_DestroyTexture(hard);
+    SDL_DestroyTexture(places_tex); SDL_DestroyTexture(leaderboard_player);
+    SDL_DestroyTexture(back_to_menu); SDL_DestroyTexture(points_tex);
+    SDL_DestroyTexture(potions_tex); SDL_DestroyTexture(congrats);
     SDL_DestroyTexture(winning_point);
 }
 

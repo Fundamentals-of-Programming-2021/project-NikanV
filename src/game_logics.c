@@ -66,6 +66,10 @@ void input_struct(){
     all_bases.base_id[1] = 0xaaf010ff;
     all_bases.base_id[2] = 0xaae81815;
     all_bases.base_id[3] = 0xaa7a0a53;
+    //for memory test
+//    all_bases.base_id[2] = 0xaaffff46; all_bases.base_id[3] = 0xaaffff46; all_bases.base_id[4] = 0xaaffff46;
+//    all_bases.base_id[5] = 0xaaffff46; all_bases.base_id[6] = 0xaaffff46; all_bases.base_id[7] = 0xaaffff46;
+//    all_bases.base_id[8] = 0xaaffff46; all_bases.base_id[9] = 0xaaffff46; all_bases.base_id[10] = 0xaaffff46;
     for(int i = 0;i < 4;i++){
         all_potions.x[i] = 0;
         all_potions.y[i] = 0;
@@ -131,6 +135,37 @@ void draw_map(){
         get_img_and_rect("../images/potion1.png", &potions_tex);
         SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
     }
+    else if(!all_potions.draw_potion[0] && all_potions.is_active[0]){
+        potions_rec.x = 5*SCREEN_WIDTH/100;
+        potions_rec.y = 5*SCREEN_HEIGHT/100;
+        potions_rec.w = 5*SCREEN_WIDTH/100;
+        potions_rec.h = 5*SCREEN_WIDTH/100;
+        sprintf(number, "%d", all_potions.timer[0]);
+        if(all_potions.id[0] == 0xaaffff46){
+            get_text_and_rect(color(70, 255, 255, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[0] == 0xaaf010ff){
+            get_text_and_rect(color(255, 160, 240, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[0] == 0xaae81815){
+            get_text_and_rect(color(21, 24, 232, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[0] == 0xaa7a0a53){
+            get_text_and_rect(color(83, 10, 122, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+    }
     else if(all_potions.draw_potion[1]) {
         potions_rec.x = all_potions.x[1];
         potions_rec.y = all_potions.y[1];
@@ -138,6 +173,37 @@ void draw_map(){
         potions_rec.h = 50;
         get_img_and_rect("../images/potion2.png", &potions_tex);
         SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    }
+    else if(!all_potions.draw_potion[1] && all_potions.is_active[1]){
+        potions_rec.x = 5*SCREEN_WIDTH/100;
+        potions_rec.y = 5*SCREEN_HEIGHT/100;
+        potions_rec.w = 5*SCREEN_WIDTH/100;
+        potions_rec.h = 5*SCREEN_WIDTH/100;
+        sprintf(number, "%d", all_potions.timer[1]);
+        if(all_potions.id[1] == 0xaaffff46){
+            get_text_and_rect(color(70, 255, 255, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[1] == 0xaaf010ff){
+            get_text_and_rect(color(255, 160, 240, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[1] == 0xaae81815){
+            get_text_and_rect(color(21, 24, 232, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[1] == 0xaa7a0a53){
+            get_text_and_rect(color(83, 10, 122, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
     }
     else if(all_potions.draw_potion[2]) {
         potions_rec.x = all_potions.x[2];
@@ -147,6 +213,37 @@ void draw_map(){
         get_img_and_rect("../images/potion3.png", &potions_tex);
         SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
     }
+    else if(!all_potions.draw_potion[2] && all_potions.is_active[2]){
+        potions_rec.x = 5*SCREEN_WIDTH/100;
+        potions_rec.y = 5*SCREEN_HEIGHT/100;
+        potions_rec.w = 5*SCREEN_WIDTH/100;
+        potions_rec.h = 5*SCREEN_WIDTH/100;
+        sprintf(number, "%d", all_potions.timer[2]);
+        if(all_potions.id[2] == 0xaaffff46){
+            get_text_and_rect(color(70, 255, 255, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[2] == 0xaaf010ff){
+            get_text_and_rect(color(255, 160, 240, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[2] == 0xaae81815){
+            get_text_and_rect(color(21, 24, 232, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[2] == 0xaa7a0a53){
+            get_text_and_rect(color(83, 10, 122, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+    }
     else if(all_potions.draw_potion[3]) {
         potions_rec.x = all_potions.x[3];
         potions_rec.y = all_potions.y[3];
@@ -154,6 +251,37 @@ void draw_map(){
         potions_rec.h = 50;
         get_img_and_rect("../images/potion4.png", &potions_tex);
         SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+    }
+    else if(!all_potions.draw_potion[3] && all_potions.is_active[3]){
+        potions_rec.x = 5*SCREEN_WIDTH/100;
+        potions_rec.y = 5*SCREEN_HEIGHT/100;
+        potions_rec.w = 5*SCREEN_WIDTH/100;
+        potions_rec.h = 5*SCREEN_WIDTH/100;
+        sprintf(number, "%d", all_potions.timer[3]);
+        if(all_potions.id[3] == 0xaaffff46){
+            get_text_and_rect(color(70, 255, 255, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[3] == 0xaaf010ff){
+            get_text_and_rect(color(255, 160, 240, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[3] == 0xaae81815){
+            get_text_and_rect(color(21, 24, 232, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
+        else if(all_potions.id[3] == 0xaa7a0a53){
+            get_text_and_rect(color(83, 10, 122, 255), 5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100,
+                              5*SCREEN_WIDTH/100, 5*SCREEN_WIDTH/100, number, &potions_tex,
+                              &potions_rec);
+            SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
+        }
     }
 }
 
@@ -383,7 +511,7 @@ void make_potion(){
                             all_potions.is_active[potion_ran] = true;
                             all_potions.timer[potion_ran] = 10;
                             all_potions.id[potion_ran] = all_bases.marches[i].id;
-                            for(int k = 0;k < 10;k++){
+                            for(int k = 0;k < 11;k++){
                                 if(all_bases.base_id[k] == all_potions.id[potion_ran]){
                                     all_bases.max_points[k] = 1000;
                                 }
@@ -395,7 +523,7 @@ void make_potion(){
                 }
             }
             else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
-                for(int k = 0;k < 10;k++){
+                for(int k = 0;k < 11;k++){
                     if(all_bases.base_id[k] == all_potions.id[potion_ran]){
                         all_bases.max_points[k] = 1000;
                     }
@@ -407,7 +535,7 @@ void make_potion(){
             else if(all_potions.timer[potion_ran] == 0){
                 all_potions.is_active[potion_ran] = false;
                 all_potions.timer[potion_ran] = -1;
-                for(int k = 0;k < 10;k++){
+                for(int k = 0;k < 11;k++){
                     if(all_bases.base_id[k] == all_potions.id[potion_ran]){
                         all_bases.max_points[k] = 50;
                     }
@@ -431,7 +559,7 @@ void make_potion(){
                             all_potions.is_active[potion_ran] = true;
                             all_potions.timer[potion_ran] = 10;
                             all_potions.id[potion_ran] = all_bases.marches[i].id;
-                            for(int k = 0;k < 10;k++){
+                            for(int k = 0;k < 11;k++){
                                 if(all_bases.base_id[k] == all_potions.id[potion_ran]){
                                     all_bases.points_speed[k] = 2;
                                 }
@@ -443,7 +571,7 @@ void make_potion(){
                 }
             }
             else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
-                for(int k = 0;k < 10;k++){
+                for(int k = 0;k < 11;k++){
                     if(all_bases.base_id[k] == all_potions.id[potion_ran]){
                         all_bases.points_speed[k] = 2;
                     }
@@ -455,7 +583,7 @@ void make_potion(){
             else if(all_potions.timer[potion_ran] == 0){
                 all_potions.is_active[potion_ran] = false;
                 all_potions.timer[potion_ran] = -1;
-                for(int k = 0;k < 10;k++){
+                for(int k = 0;k < 11;k++){
                     if(all_bases.base_id[k] == all_potions.id[potion_ran]){
                         all_bases.points_speed[k] = 1;
                     }
@@ -518,8 +646,8 @@ void apply_speed_point(){
                     all_bases.marches[j].vy *= 2;
                 }
                 else if(all_potions.is_active[1] && all_potions.id[1] != all_bases.marches[j].id){
-                    all_bases.marches[j].vx *= 1/2;
-                    all_bases.marches[j].vy *= 1/2;
+                    all_bases.marches[j].vx *= 0.5;
+                    all_bases.marches[j].vy *= 0.5;
                 }
                 all_bases.marches[j].x[z] += all_bases.marches[j].vx;
                 all_bases.marches[j].y[z] += all_bases.marches[j].vy;
@@ -588,7 +716,7 @@ void check_accidents(){
 }
 
 void bot_movements(int index){
-    if(point_adder%5 == 0) {
+    if(point_adder%10 == 0) {
         if (all_bases.base_id[index] != 0xaaffff46 && all_bases.base_id[index] != 0xaaffffff) {
             for (int i = 0; i < 11; i++) {
                 if (i != index && all_bases.base_id[i] == 0xaaffffff && all_bases.being_attacked[i] == false) {
@@ -635,6 +763,7 @@ void check_winner(){
         won = true;
         goto_game = false;
         goto_winner = true;
+        save_map();
         get_text_and_rect(color(70, 255, 255, 255), 13*SCREEN_WIDTH/100, 35*SCREEN_HEIGHT/100,
                           75*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100, "Congrats on your win!",
                           &congrats, &congrats_rec);
@@ -668,6 +797,7 @@ void check_winner(){
         won = false;
         goto_game = false;
         goto_winner = true;
+        save_map();
         get_text_and_rect(color(70, 255, 255, 255), 13*SCREEN_WIDTH/100, 35*SCREEN_HEIGHT/100,
                           75*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100, "Better luck next time :(",
                           &congrats, &congrats_rec);

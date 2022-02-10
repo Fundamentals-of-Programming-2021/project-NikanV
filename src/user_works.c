@@ -67,3 +67,25 @@ void add_point_to_player(int point){
         }
     }
 }
+
+void read_old_map(){
+    FILE* f = fopen("map.txt", "r");
+    char* tmp_username = (char*)malloc(sizeof(char)*15);
+    for(int i = 0;i < 11;i++){
+        if(i == 0){
+            fscanf(f, "%s\n", tmp_username);
+        }
+        fscanf(f, "%d %d\n", &new_map_x[i], &new_map_y[i]);
+        xy_maker(new_map_x[i], new_map_y[i], i);
+    }
+}
+
+void save_map(){
+    remove("map.txt");
+    FILE* f = fopen("map.txt", "w");
+    fprintf(f, "%s\n", username);
+    for(int i = 0;i < 11;i++){
+        fprintf(f, "%d %d\n", all_bases.base_x[i], all_bases.base_y[i]);
+    }
+    fclose(f);
+}

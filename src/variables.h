@@ -66,6 +66,7 @@ typedef struct player{
 extern player all_players[100];
 extern int count_players;
 extern bool signed_up;
+extern int new_map_x[11], new_map_y[11];
 
 //main menu variables
 extern SDL_bool shallExit;

@@ -22,6 +22,8 @@ int potion_ran = 0;
 player all_players[100];
 int count_players = 0;
 bool signed_up = false;
+int new_map_x[11], new_map_y[11];
+
 
 SDL_bool shallExit = SDL_FALSE;
 SDL_bool goto_start = true;
