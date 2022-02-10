@@ -41,7 +41,7 @@ int point_adder = 0;
 int count_players = 0;
 
 double delta_y, delta_x, theta;
-double speed = 3;
+double speed = 20;
 int total_marches = 0;
 bool marches_state[100];
 SDL_Texture* points_tex;
@@ -58,3 +58,6 @@ bool won = false;
 int potion_ran = 0;
 bool potion_active = false;
 char number[5];
+
+SDL_Texture* congrats;
+SDL_Rect congrats_rec;

@@ -78,6 +78,7 @@ void input_struct(){
         all_bases.base_points[i] = 10;
         all_bases.being_attacked[i] = false;
         all_bases.points_speed[i] = 1;
+        all_bases.max_points[i] = 50;
     }
     for(int i = 0;i < 100;i++){
         for(int j = 0;j < 200;j++) {
@@ -97,6 +98,7 @@ void input_struct(){
         all_potions.x[i] = 0;
         all_potions.y[i] = 0;
         all_potions.is_active[i] = false;
+        all_potions.draw_potion[i] = false;
         all_potions.id[i] = -1;
         all_potions.timer[i] = -1;
     }
@@ -148,7 +150,7 @@ void draw_map(){
                           number, &points_tex,&points_rec);
         SDL_RenderCopy(sdlRenderer, points_tex, NULL, &points_rec);
     }
-    if(all_potions.is_active[0]) {
+    if(all_potions.draw_potion[0]) {
         potions_rec.x = all_potions.x[0];
         potions_rec.y = all_potions.y[0];
         potions_rec.w = 50;
@@ -156,7 +158,7 @@ void draw_map(){
         get_img_and_rect("../images/potion1.png", &potions_tex);
         SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
     }
-    else if(all_potions.is_active[1]) {
+    else if(all_potions.draw_potion[1]) {
         potions_rec.x = all_potions.x[1];
         potions_rec.y = all_potions.y[1];
         potions_rec.w = 50;
@@ -164,7 +166,7 @@ void draw_map(){
         get_img_and_rect("../images/potion2.png", &potions_tex);
         SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
     }
-    else if(all_potions.is_active[2]) {
+    else if(all_potions.draw_potion[2]) {
         potions_rec.x = all_potions.x[2];
         potions_rec.y = all_potions.y[2];
         potions_rec.w = 50;
@@ -172,7 +174,7 @@ void draw_map(){
         get_img_and_rect("../images/potion3.png", &potions_tex);
         SDL_RenderCopy(sdlRenderer, potions_tex, NULL, &potions_rec);
     }
-    else if(all_potions.is_active[3]) {
+    else if(all_potions.draw_potion[3]) {
         potions_rec.x = all_potions.x[3];
         potions_rec.y = all_potions.y[3];
         potions_rec.w = 50;
@@ -256,15 +258,13 @@ void draw_diff_pick(SDL_Texture *main_menu_bg_tex, SDL_Texture *ingame_name, SDL
 
 void make_march(){
     for(int i = 0;i < 100;i++){
-        if(point_adder%1 == 0) {
-            if (all_bases.marches[i].total_soldiers > 0) {
-                all_bases.marches[i].x[all_bases.marches[i].total_soldiers] +=
-                        (Sint16)all_bases.base_x[all_bases.marches[i].src_index] + (Sint16)all_bases.marches[i].vx;
-                all_bases.marches[i].y[all_bases.marches[i].total_soldiers] +=
-                        (Sint16)all_bases.base_y[all_bases.marches[i].src_index] + (Sint16)all_bases.marches[i].vy;
-                all_bases.marches[i].is_atk[all_bases.marches[i].total_soldiers] = true;
-                all_bases.marches[i].total_soldiers--;
-            }
+        if (all_bases.marches[i].total_soldiers > 0) {
+            all_bases.marches[i].x[all_bases.marches[i].total_soldiers] +=
+                    all_bases.base_x[all_bases.marches[i].src_index] + all_bases.marches[i].vx;
+            all_bases.marches[i].y[all_bases.marches[i].total_soldiers] +=
+                    all_bases.base_y[all_bases.marches[i].src_index] + all_bases.marches[i].vy;
+            all_bases.marches[i].is_atk[all_bases.marches[i].total_soldiers] = true;
+            all_bases.marches[i].total_soldiers--;
         }
     }
 }
@@ -281,37 +281,43 @@ void draw_march(){
 }
 
 void apply_speed_point(){
-    for(int i = 0;i < 10;i++){
-        if(all_bases.base_id[i] != 0xaaffffff) {
-            if(point_adder%2 == 0 && all_bases.base_points[i] < 50) {
+    for(int i = 0;i < 10;i++) {
+        if (all_bases.base_id[i] != 0xaaffffff) {
+            if (point_adder % 2 == 0 && all_bases.base_points[i] < all_bases.max_points[i]) {
                 all_bases.base_points[i] += all_bases.points_speed[i];
             }
         }
-        for(int j = 0;j < 100;j++){
-            if(point_adder%1 == 0) {
-                for (int z = 0; z < 200; z++) {
-                    if (all_bases.marches[j].is_atk[z] == true) {
-                        delta_y = (double)(all_bases.base_y[all_bases.marches[j].des_index]-all_bases.marches[j].y[z]);
-                        delta_x = (double)(all_bases.base_x[all_bases.marches[j].des_index]-all_bases.marches[j].x[z]);
-                        theta = atan(delta_y/delta_x);
-                        all_bases.marches[j].vx = speed*cos(theta);
-                        all_bases.marches[j].vy = speed*sin(theta);
-                        if(delta_x < 0 && all_bases.marches[j].vx > 0){
-                            all_bases.marches[j].vx *= -1;
-                        }
-                        else if(delta_x > 0 && all_bases.marches[j].vx < 0){
-                            all_bases.marches[j].vx *= -1;
-                        }
-                        if(delta_y < 0 && all_bases.marches[j].vy > 0){
-                            all_bases.marches[j].vy *= -1;
-                        }
-                        else if(delta_y > 0 && all_bases.marches[j].vy < 0){
-                            all_bases.marches[j].vy *= -1;
-                        }
-                        all_bases.marches[j].x[z] += all_bases.marches[j].vx;
-                        all_bases.marches[j].y[z] += all_bases.marches[j].vy;
-                    }
+    }
+    for(int j = 0;j < 100;j++){
+        for (int z = 0; z < 200; z++) {
+            if (all_bases.marches[j].is_atk[z] == true) {
+                delta_y = (double)(all_bases.base_y[all_bases.marches[j].des_index]-all_bases.marches[j].y[z]);
+                delta_x = (double)(all_bases.base_x[all_bases.marches[j].des_index]-all_bases.marches[j].x[z]);
+                theta = atan(delta_y/delta_x);
+                all_bases.marches[j].vx = speed*cos(theta);
+                all_bases.marches[j].vy = speed*sin(theta);
+                if(delta_x < 0 && all_bases.marches[j].vx > 0){
+                    all_bases.marches[j].vx *= -1;
                 }
+                else if(delta_x > 0 && all_bases.marches[j].vx < 0){
+                    all_bases.marches[j].vx *= -1;
+                }
+                if(delta_y < 0 && all_bases.marches[j].vy > 0){
+                    all_bases.marches[j].vy *= -1;
+                }
+                else if(delta_y > 0 && all_bases.marches[j].vy < 0){
+                    all_bases.marches[j].vy *= -1;
+                }
+                if(all_potions.is_active[0] && all_potions.id[0] == all_bases.marches[j].id){
+                    all_bases.marches[j].vx *= 2;
+                    all_bases.marches[j].vy *= 2;
+                }
+                else if(all_potions.is_active[1] && all_potions.id[1] != all_bases.marches[j].id){
+                    all_bases.marches[j].vx *= 1/2;
+                    all_bases.marches[j].vy *= 1/2;
+                }
+                all_bases.marches[j].x[z] += all_bases.marches[j].vx;
+                all_bases.marches[j].y[z] += all_bases.marches[j].vy;
             }
         }
     }
@@ -354,13 +360,12 @@ void stop_speed(){
 }
 
 void make_attack(int* first, int* second){
-    if(all_bases.base_points[*first] > 0) {
+    if(*first >= 0 && *second >= 0 && *first <= 9 && *second <= 9) {
         delta_y = (double) (all_bases.base_y[*second] - all_bases.base_y[*first]);
         delta_x = (double) (all_bases.base_x[*second] - all_bases.base_x[*first]);
         theta = atan(delta_y / delta_x);
         for(int i = 0;i < 100;i++){
             if(marches_state[i] == false){
-                printf("%d|", i);
                 all_bases.marches[i].vx = speed * cos(theta);
                 all_bases.marches[i].vy = speed * sin(theta);
                 if (delta_x < 0 && all_bases.marches[i].vx > 0) {
@@ -391,35 +396,37 @@ void make_attack(int* first, int* second){
 }
 
 void bot_movements(int* first, int* second, int index){
-    if (all_bases.base_id[index] != 0xaaffff46 && all_bases.base_id[index] != 0xaaffffff) {
-        for (int i = 0; i < 10; i++) {
-            if (i != index && all_bases.base_id[i] == 0xaaffffff && all_bases.being_attacked[i] == false){
-                *first = index;
-                *second = i;
-                make_attack(first, second);
-                break;
-            }
-            else if(i != index && all_bases.base_id[i] == all_bases.base_id[index] &&
-                    all_bases.being_attacked[i] == true && all_bases.base_points[i] < all_bases.base_points[index]){
-                *first = index;
-                *second = i;
-                make_attack(first, second);
-                break;
-            }
-            else if(i != index && all_bases.base_points[index] >= 20 && all_bases.base_id[i] !=
-                    all_bases.base_id[index] && all_bases.being_attacked[i] == false &&
-                    all_bases.base_points[index] > all_bases.base_points[i]+10 && leader_base[0] > 4){
-                *first = index;
-                *second = i;
-                make_attack(first, second);
-                break;
-            }
-            else if(i !=index && point_adder > 1000 && leader_base[0] < 4 && all_bases.base_id[i] == 0xaaffff46 &&
-                    all_bases.being_attacked[i] == false){
-                *first = index;
-                *second = i;
-                make_attack(first, second);
-                break;
+    if(point_adder%5 == 0) {
+        if (all_bases.base_id[index] != 0xaaffff46 && all_bases.base_id[index] != 0xaaffffff) {
+            for (int i = 0; i < 10; i++) {
+                if (i != index && all_bases.base_id[i] == 0xaaffffff && all_bases.being_attacked[i] == false) {
+                    *first = index;
+                    *second = i;
+                    make_attack(first, second);
+                    break;
+                } else if (i != index && all_bases.base_id[i] == all_bases.base_id[index] &&
+                           all_bases.being_attacked[i] == true &&
+                           all_bases.base_points[i] < all_bases.base_points[index]) {
+                    *first = index;
+                    *second = i;
+                    make_attack(first, second);
+                    break;
+                } else if (i != index && all_bases.base_points[index] >= 20 && all_bases.base_id[i] !=
+                                                                               all_bases.base_id[index] &&
+                           all_bases.being_attacked[i] == false &&
+                           all_bases.base_points[index] > all_bases.base_points[i] + 10 && leader_base[0] > 4) {
+                    *first = index;
+                    *second = i;
+                    make_attack(first, second);
+                    break;
+                } else if (i != index && point_adder > 100 && leader_base[0] < 4 &&
+                           all_bases.base_id[i] == 0xaaffff46 &&
+                           all_bases.being_attacked[i] == false) {
+                    *first = index;
+                    *second = i;
+                    make_attack(first, second);
+                    break;
+                }
             }
         }
     }
@@ -553,11 +560,17 @@ void check_winner(){
         won = true;
         goto_game = false;
         goto_winner = true;
+        get_text_and_rect(color(70, 255, 255, 255), 13*SCREEN_WIDTH/100, 35*SCREEN_HEIGHT/100,
+                          75*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100, "Congrats on your win!",
+                          &congrats, &congrats_rec);
     }
     else if(flag == 0){
         won = false;
         goto_game = false;
         goto_winner = true;
+        get_text_and_rect(color(70, 255, 255, 255), 13*SCREEN_WIDTH/100, 35*SCREEN_HEIGHT/100,
+                          75*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100, "Better luck next time :(",
+                          &congrats, &congrats_rec);
     }
 }
 
@@ -651,38 +664,29 @@ void make_potion(){
     int tmp_ran1 = rand()%10, tmp_ran2 = (tmp_ran1+3)%10;
     switch (potion_ran) {
         case 0:
-            if(!all_potions.is_active[potion_ran] && !potion_active){
+            if(!all_potions.draw_potion[potion_ran] && !all_potions.is_active[potion_ran]){
                 all_potions.x[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_x[tmp_ran2])/2;
-                all_potions.y[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                all_potions.y[potion_ran] = (all_bases.base_y[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                all_potions.draw_potion[potion_ran] = true;
+            }
+            if(all_potions.is_active[potion_ran] == false){
                 for(int i = 0;i < 100;i++){
                     for(int j = 0;j < 200;j++){
                         if(abs(all_bases.marches[i].x[j] - all_potions.x[potion_ran]) < 50 &&
-                                abs(all_bases.marches[i].y[j] - all_potions.y[potion_ran]) < 50){
+                           abs(all_bases.marches[i].y[j] - all_potions.y[potion_ran]) < 50){
                             all_potions.is_active[potion_ran] = true;
                             all_potions.timer[potion_ran] = 10;
                             all_potions.id[potion_ran] = all_bases.marches[i].id;
-                            for(int k = 0;k < 100;k++){
-                                if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                                    all_bases.marches[k].vx *= 2;
-                                    all_bases.marches[k].vy *= 2;
-                                }
-                            }
-                            potion_ran++;
-                            potion_ran %= 4;
+
                             potion_active = true;
+                            all_potions.draw_potion[potion_ran] = false;
                             return;
                         }
                     }
                 }
             }
             else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
-                for(int k = 0;k < 100;k++){
-                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                        all_bases.marches[k].vx *= 2;
-                        all_bases.marches[k].vy *= 2;
-                    }
-                }
-                if(point_adder%30 == 0){
+                if(point_adder%10 == 0){
                     all_potions.timer[potion_ran]--;
                 }
             }
@@ -690,19 +694,18 @@ void make_potion(){
                 all_potions.is_active[potion_ran] = false;
                 all_potions.timer[potion_ran] = -1;
                 all_potions.id[potion_ran] = -1;
-                for(int k = 0;k < 100;k++){
-                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                        all_bases.marches[k].vx *= 1/2;
-                        all_bases.marches[k].vy *= 1/2;
-                    }
-                }
                 potion_active = false;
+                potion_ran++;
+                potion_ran %= 4;
             }
             break;
         case 1:
-            if(!all_potions.is_active[potion_ran] && !potion_active){
+            if(!all_potions.draw_potion[potion_ran] && !all_potions.is_active[potion_ran]){
                 all_potions.x[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_x[tmp_ran2])/2;
-                all_potions.y[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                all_potions.y[potion_ran] = (all_bases.base_y[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                all_potions.draw_potion[potion_ran] = true;
+            }
+            if(all_potions.is_active[potion_ran] == false){
                 for(int i = 0;i < 100;i++){
                     for(int j = 0;j < 200;j++){
                         if(abs(all_bases.marches[i].x[j] - all_potions.x[potion_ran]) < 50 &&
@@ -710,28 +713,15 @@ void make_potion(){
                             all_potions.is_active[potion_ran] = true;
                             all_potions.timer[potion_ran] = 10;
                             all_potions.id[potion_ran] = all_bases.marches[i].id;
-                            for(int k = 0;k < 100;k++){
-                                if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                                    all_bases.marches[k].vx *= 2;
-                                    all_bases.marches[k].vy *= 2;
-                                }
-                            }
-                            potion_ran++;
-                            potion_ran %= 4;
                             potion_active = true;
+                            all_potions.draw_potion[potion_ran] = false;
                             return;
                         }
                     }
                 }
             }
             else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
-                for(int k = 0;k < 100;k++){
-                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                        all_bases.marches[k].vx *= 2;
-                        all_bases.marches[k].vy *= 2;
-                    }
-                }
-                if(point_adder%30 == 0){
+                if(point_adder%10 == 0){
                     all_potions.timer[potion_ran]--;
                 }
             }
@@ -739,19 +729,18 @@ void make_potion(){
                 all_potions.is_active[potion_ran] = false;
                 all_potions.timer[potion_ran] = -1;
                 all_potions.id[potion_ran] = -1;
-                for(int k = 0;k < 100;k++){
-                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                        all_bases.marches[k].vx *= 1/2;
-                        all_bases.marches[k].vy *= 1/2;
-                    }
-                }
                 potion_active = false;
+                potion_ran++;
+                potion_ran %= 4;
             }
             break;
         case 2:
-            if(!all_potions.is_active[potion_ran] && !potion_active){
+            if(!all_potions.draw_potion[potion_ran] && !all_potions.is_active[potion_ran]){
                 all_potions.x[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_x[tmp_ran2])/2;
-                all_potions.y[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                all_potions.y[potion_ran] = (all_bases.base_y[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                all_potions.draw_potion[potion_ran] = true;
+            }
+            if(all_potions.is_active[potion_ran] == false){
                 for(int i = 0;i < 100;i++){
                     for(int j = 0;j < 200;j++){
                         if(abs(all_bases.marches[i].x[j] - all_potions.x[potion_ran]) < 50 &&
@@ -759,48 +748,49 @@ void make_potion(){
                             all_potions.is_active[potion_ran] = true;
                             all_potions.timer[potion_ran] = 10;
                             all_potions.id[potion_ran] = all_bases.marches[i].id;
-                            for(int k = 0;k < 100;k++){
-                                if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                                    all_bases.marches[k].vx *= 2;
-                                    all_bases.marches[k].vy *= 2;
+                            for(int k = 0;k < 10;k++){
+                                if(all_bases.base_id[k] == all_potions.id[potion_ran]){
+                                    all_bases.max_points[k] = 1000;
                                 }
                             }
-                            potion_ran++;
-                            potion_ran %= 4;
                             potion_active = true;
+                            all_potions.draw_potion[potion_ran] = false;
                             return;
                         }
                     }
                 }
             }
             else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
-                for(int k = 0;k < 100;k++){
-                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                        all_bases.marches[k].vx *= 2;
-                        all_bases.marches[k].vy *= 2;
+                for(int k = 0;k < 10;k++){
+                    if(all_bases.base_id[k] == all_potions.id[potion_ran]){
+                        all_bases.max_points[k] = 1000;
                     }
                 }
-                if(point_adder%30 == 0){
+                if(point_adder%10 == 0){
                     all_potions.timer[potion_ran]--;
                 }
             }
             else if(all_potions.timer[potion_ran] == 0){
                 all_potions.is_active[potion_ran] = false;
                 all_potions.timer[potion_ran] = -1;
-                all_potions.id[potion_ran] = -1;
-                for(int k = 0;k < 100;k++){
-                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                        all_bases.marches[k].vx *= 1/2;
-                        all_bases.marches[k].vy *= 1/2;
+                for(int k = 0;k < 10;k++){
+                    if(all_bases.base_id[k] == all_potions.id[potion_ran]){
+                        all_bases.max_points[k] = 50;
                     }
                 }
+                all_potions.id[potion_ran] = -1;
                 potion_active = false;
+                potion_ran++;
+                potion_ran %= 4;
             }
             break;
         case 3:
-            if(!all_potions.is_active[potion_ran] && !potion_active){
+            if(!all_potions.draw_potion[potion_ran] && !all_potions.is_active[potion_ran]){
                 all_potions.x[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_x[tmp_ran2])/2;
-                all_potions.y[potion_ran] = (all_bases.base_x[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                all_potions.y[potion_ran] = (all_bases.base_y[tmp_ran1]+all_bases.base_y[tmp_ran2])/2;
+                all_potions.draw_potion[potion_ran] = true;
+            }
+            if(all_potions.is_active[potion_ran] == false){
                 for(int i = 0;i < 100;i++){
                     for(int j = 0;j < 200;j++){
                         if(abs(all_bases.marches[i].x[j] - all_potions.x[potion_ran]) < 50 &&
@@ -808,42 +798,40 @@ void make_potion(){
                             all_potions.is_active[potion_ran] = true;
                             all_potions.timer[potion_ran] = 10;
                             all_potions.id[potion_ran] = all_bases.marches[i].id;
-                            for(int k = 0;k < 100;k++){
-                                if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                                    all_bases.marches[k].vx *= 2;
-                                    all_bases.marches[k].vy *= 2;
+                            for(int k = 0;k < 10;k++){
+                                if(all_bases.base_id[k] == all_potions.id[potion_ran]){
+                                    all_bases.points_speed[k] = 2;
                                 }
                             }
-                            potion_ran++;
-                            potion_ran %= 4;
                             potion_active = true;
+                            all_potions.draw_potion[potion_ran] = false;
                             return;
                         }
                     }
                 }
             }
             else if((all_potions.is_active[potion_ran] && all_potions.timer[potion_ran] > 0)){
-                for(int k = 0;k < 100;k++){
-                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                        all_bases.marches[k].vx *= 2;
-                        all_bases.marches[k].vy *= 2;
+                for(int k = 0;k < 10;k++){
+                    if(all_bases.base_id[k] == all_potions.id[potion_ran]){
+                        all_bases.points_speed[k] = 2;
                     }
                 }
-                if(point_adder%30 == 0){
+                if(point_adder%10 == 0){
                     all_potions.timer[potion_ran]--;
                 }
             }
             else if(all_potions.timer[potion_ran] == 0){
                 all_potions.is_active[potion_ran] = false;
                 all_potions.timer[potion_ran] = -1;
-                all_potions.id[potion_ran] = -1;
-                for(int k = 0;k < 100;k++){
-                    if(all_bases.marches[k].id == all_potions.id[potion_ran]){
-                        all_bases.marches[k].vx *= 1/2;
-                        all_bases.marches[k].vy *= 1/2;
+                for(int k = 0;k < 10;k++){
+                    if(all_bases.base_id[k] == all_potions.id[potion_ran]){
+                        all_bases.points_speed[k] = 1;
                     }
                 }
+                all_potions.id[potion_ran] = -1;
                 potion_active = false;
+                potion_ran++;
+                potion_ran %= 4;
             }
             break;
         default:

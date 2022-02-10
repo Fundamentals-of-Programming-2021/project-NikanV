@@ -47,6 +47,7 @@ typedef struct each_base{
     int base_points[10];
     int points_speed[10];
     int base_id[10];
+    int max_points[10];
     bool being_attacked[10];
     struct march_info marches[100];
 }each_base;
@@ -62,6 +63,7 @@ typedef struct potions{
     Sint16 y[4];
     int id[4];
     bool is_active[4];
+    bool draw_potion[4];
     int timer[4];
 }potions;
 
@@ -94,3 +96,6 @@ extern int potion_ran;
 extern bool potion_active;
 
 extern char number[5];
+
+extern SDL_Texture* congrats;
+extern SDL_Rect congrats_rec;

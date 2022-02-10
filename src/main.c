@@ -125,6 +125,7 @@ int main() {
     SDL_Rect places_rec;
     potion_ran = rand()%4;
 
+
     get_all_usernames();
 
     while (shallExit == SDL_FALSE) {
@@ -446,19 +447,18 @@ int main() {
             if(point_adder == 1000000){
                 point_adder = 0;
             }
-            potion_ran = 0;
             draw_map();
-            //make_potion();
             make_march();
             draw_march();
             check_accidents();
+            make_potion();
             apply_speed_point();
             stop_speed();
             if(show_top_four) {
                 top_four(places_tex, places_rec);
             }
-            check_winner();
             bot_movements(&first, &second, bot_ran);
+            check_winner();
 
             bot_ran = rand()%10;
 
@@ -489,6 +489,7 @@ int main() {
             SDL_RenderClear(sdlRenderer);
 
             SDL_RenderCopy(sdlRenderer, main_menu_bg_tex, NULL, NULL);
+            SDL_RenderCopy(sdlRenderer, congrats, NULL, &congrats_rec);
 
             add_point();
 
