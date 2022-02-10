@@ -480,7 +480,6 @@ int main() {
                         break;
                 }
             }
-
         }
 
         //goto winner
@@ -491,7 +490,37 @@ int main() {
             SDL_RenderCopy(sdlRenderer, main_menu_bg_tex, NULL, NULL);
             SDL_RenderCopy(sdlRenderer, congrats, NULL, &congrats_rec);
 
-            add_point();
+            boxColor(sdlRenderer, SCREEN_WIDTH*40/100, SCREEN_HEIGHT*70/100,
+                     SCREEN_WIDTH*60/100, SCREEN_HEIGHT*80/100, 0xffffff44);
+            if(won){
+                if(pick_easy){
+                    get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
+                                      45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
+                                      "You won 20 pts", &winning_point, &winning_point_rec);
+                }
+                else if(pick_medium){
+                    get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
+                                      45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
+                                      "You won 40 pts", &winning_point, &winning_point_rec);
+                }
+                else if(pick_hard){
+                    get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
+                                      45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
+                                      "You won 60 pts", &winning_point, &winning_point_rec);
+                }
+                else{
+                    get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
+                                      45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
+                                      "You won 40 pts", &winning_point, &winning_point_rec);
+                }
+            }
+            else{
+                get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
+                                  45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
+                                  "You lost 15 pts", &winning_point, &winning_point_rec);
+            }
+            SDL_RenderCopy(sdlRenderer, winning_point, NULL, &winning_point_rec);
+
 
             SDL_Event e;
             while(SDL_PollEvent(&e)){

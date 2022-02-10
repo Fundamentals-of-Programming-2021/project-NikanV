@@ -99,3 +99,6 @@ extern char number[5];
 
 extern SDL_Texture* congrats;
 extern SDL_Rect congrats_rec;
+
+extern SDL_Texture* winning_point;
+extern SDL_Rect winning_point_rec;

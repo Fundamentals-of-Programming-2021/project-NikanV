@@ -293,6 +293,9 @@ void apply_speed_point(){
             if (all_bases.marches[j].is_atk[z] == true) {
                 delta_y = (double)(all_bases.base_y[all_bases.marches[j].des_index]-all_bases.marches[j].y[z]);
                 delta_x = (double)(all_bases.base_x[all_bases.marches[j].des_index]-all_bases.marches[j].x[z]);
+//                if(delta_x = 0){
+//                    printf("an");
+//                }
                 theta = atan(delta_y/delta_x);
                 all_bases.marches[j].vx = speed*cos(theta);
                 all_bases.marches[j].vy = speed*sin(theta);
@@ -574,9 +577,6 @@ void check_winner(){
     }
 }
 
-void add_point(){
-
-}
 
 void get_all_usernames(){
     FILE* f = fopen("username.txt", "r");

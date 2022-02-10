@@ -68,11 +68,7 @@ void selecting_bases(SDL_Event e, int* first, int* second);
 
 void top_four(SDL_Texture *places_tex, SDL_Rect places_rec);
 
-void make_speed();
-
 void check_winner();
-
-void add_point();
 
 void get_all_usernames();
 

@@ -61,3 +61,6 @@ char number[5];
 
 SDL_Texture* congrats;
 SDL_Rect congrats_rec;
+
+SDL_Texture* winning_point;
+SDL_Rect winning_point_rec;
