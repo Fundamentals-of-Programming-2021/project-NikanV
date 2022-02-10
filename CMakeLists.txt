@@ -1,4 +1,4 @@
-set(SOURCE src/main.c src/functions.h src/functions.c src/variables.h src/variables.c)
+set(SOURCE src/main.c src/functions.h src/variables.h src/variables.c src/main_menu.c src/init_end.c src/game_logics.c src/user_works.c)
 set(PROJECT_NAME Fop_project)
 
 cmake_minimum_required(VERSION 3.21)

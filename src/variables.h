@@ -12,23 +12,10 @@ extern const int SCREEN_HEIGHT;
 
 extern SDL_Window *sdlWindow;
 extern SDL_Renderer *sdlRenderer;
-
 extern TTF_Font* xeros;
-extern char* username;
 
-extern SDL_bool shallExit;
-extern SDL_bool goto_start;
-extern SDL_bool goto_main_menu;
-extern SDL_bool goto_game;
-extern SDL_bool goto_map_picker;
-extern SDL_bool goto_diff_pick;
-extern SDL_bool goto_winner;
-extern SDL_bool goto_leaderboard;
-extern SDL_bool show_top_four;
 
-extern Sint16 x[30][6]; extern Sint16 y[30][6];
-extern int l;
-
+//structs with their variables
 typedef struct march_info{
     Sint16 x[200];
     Sint16 y[200];
@@ -41,22 +28,22 @@ typedef struct march_info{
     int id;
 }march_info;
 
+extern bool marches_state[100];
+
 typedef struct each_base{
-    Sint16 base_x[10];
-    Sint16 base_y[10];
-    int base_points[10];
-    int points_speed[10];
-    int base_id[10];
-    int max_points[10];
-    bool being_attacked[10];
+    Sint16 base_x[11];
+    Sint16 base_y[11];
+    int base_points[11];
+    int points_speed[11];
+    int base_id[11];
+    int max_points[11];
+    bool being_attacked[11];
     struct march_info marches[100];
 }each_base;
 
-typedef struct player{
-    char username[15];
-    int ranking;
-    int total_pt;
-}player;
+extern each_base all_bases;
+extern Sint16 x[30][6]; extern Sint16 y[30][6];
+extern int l;
 
 typedef struct potions{
     Sint16 x[4];
@@ -67,38 +54,55 @@ typedef struct potions{
     int timer[4];
 }potions;
 
+extern potions all_potions;
+extern int potion_ran;
+
+typedef struct player{
+    char username[15];
+    int ranking;
+    int total_pt;
+}player;
+
 extern player all_players[100];
 extern int count_players;
+extern bool signed_up;
 
-extern each_base all_bases;
-extern int point_adder;
+//main menu variables
+extern SDL_bool shallExit;
+extern SDL_bool goto_start;
+extern SDL_bool goto_main_menu;
+extern SDL_bool goto_game;
+extern SDL_bool goto_map_picker;
+extern SDL_bool goto_diff_pick;
+extern SDL_bool goto_winner;
+extern SDL_bool goto_leaderboard;
+extern SDL_bool show_top_four;
 
-extern bool marches_state[100];
+extern char* username;
+extern char number[5];
 
-extern potions all_potions;
 
+//in game variables
 extern double delta_y, delta_x, theta;
 extern double speed;
-extern int total_marches;
-extern SDL_Texture* points_tex;
-extern SDL_Rect points_rec;
+extern int first_base;
+extern int second_base;
 
+extern int point_adder;
+
+extern SDL_Texture* points_tex;
 extern SDL_Texture* potions_tex;
+extern SDL_Rect points_rec;
 extern SDL_Rect potions_rec;
 
+
+//winner variables
 extern int leader_base[4];
 
 extern bool pick_easy, pick_medium, pick_hard;
 extern bool won;
 
-extern int potion_ran;
-
-extern bool potion_active;
-
-extern char number[5];
-
 extern SDL_Texture* congrats;
-extern SDL_Rect congrats_rec;
-
 extern SDL_Texture* winning_point;
+extern SDL_Rect congrats_rec;
 extern SDL_Rect winning_point_rec;

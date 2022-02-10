@@ -1,4 +1,3 @@
-
 #include "variables.h"
 #include "functions.h"
 
@@ -18,52 +17,43 @@ int main() {
     get_img_and_rect("../images/start.jpg", &start_bg_tex);
     SDL_Texture* main_menu_bg_tex;
     get_img_and_rect("../images/start.jpg", &main_menu_bg_tex);
+    SDL_Texture* map;
+    get_img_and_rect("../images/map.jpg", &map);
+    SDL_Rect map_rec;
+    map_rec.x = -SCREEN_WIDTH/8; map_rec.y = -SCREEN_HEIGHT/16;
+    map_rec.w = 22*SCREEN_WIDTH/16; map_rec.h = 20*SCREEN_HEIGHT/16;
 
-    //credits
+    //start page texts
     SDL_Texture* logo_tex;
     SDL_Rect logo_rec;
     get_text_and_rect(color(70, 255, 255, 255), SCREEN_WIDTH*30/100, SCREEN_HEIGHT*78/100,
                       SCREEN_WIDTH*40/100, SCREEN_HEIGHT*5/100,"Developed by Nikan Vasei",
                       &logo_tex, &logo_rec);
-    //logo
     SDL_Texture* name_tex;
     SDL_Rect name_rec;
     get_text_and_rect(color(70, 255, 255, 255), SCREEN_WIDTH*23/100, SCREEN_HEIGHT*13/100,
                       SCREEN_WIDTH*56/100, SCREEN_HEIGHT*20/100,"STATE.IO",
                       &name_tex, &name_rec);
 
-    //username box
-    bool signed_up = false;
-    username = (char*)malloc(sizeof(char)*15);
-    memset(username, '\0', (int)sizeof(username)*sizeof(char));
-    SDL_Texture* input_tex;
-    SDL_Rect input_rec;
-    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH*31/100, SCREEN_HEIGHT*57/100,
-                      19*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
-                      "Enter your username", &input_tex, &input_rec);
-    bool render_text = false;
-
-    //text box submit
+    //login box
     SDL_Texture* submit_button;
     SDL_Rect submit_button_rec;
     get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*44/100, SCREEN_HEIGHT*67/100,
                       6*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*4/100,
                       "Submit", &submit_button, &submit_button_rec);
+    SDL_Texture* input_tex;
+    SDL_Rect input_rec;
+    get_text_and_rect(color(255, 255, 255, 255), SCREEN_WIDTH*31/100, SCREEN_HEIGHT*57/100,
+                      19*SCREEN_WIDTH*2/100,SCREEN_HEIGHT*5/100,
+                      "Enter your username", &input_tex, &input_rec);
+    username = (char*)malloc(sizeof(char)*15);
+    memset(username, '\0', (int)sizeof(username)*sizeof(char));
+    bool render_text = false;
+
 
     //main menu boxes
-    SDL_Texture* new_game;
-    SDL_Texture* con_game;
-    SDL_Texture* leaderboard;
-    SDL_Texture* back;
-
-    SDL_Rect new_game_rec;
-    SDL_Rect con_game_rec;
-    SDL_Rect leaderboard_rec;
-    SDL_Rect back_rec;
-
-    SDL_Texture* ingame_name;
-    SDL_Rect ingame_name_rec;
-
+    SDL_Texture* new_game, *con_game, *leaderboard, *back;
+    SDL_Rect new_game_rec, con_game_rec, leaderboard_rec, back_rec;
     get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*35/100, SCREEN_HEIGHT*28/100,
                       8*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
                       "New Game", &new_game, &new_game_rec);
@@ -76,14 +66,14 @@ int main() {
     get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*42/100, SCREEN_HEIGHT*73/100,
                       4*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
                       "Back", &back, &back_rec);
+    SDL_Texture* ingame_name;
+    SDL_Rect ingame_name_rec;
+    SDL_Texture* leaderboard_player;
+    SDL_Rect leaderboard_player_rec;
 
-    //map_picker
-    SDL_Rect random_map;
-    SDL_Rect choose_dif;
-
-    SDL_Texture* random_map_tex;
-    SDL_Texture* choose_dif_tex;
-
+    //map picker
+    SDL_Texture* random_map_tex, *choose_dif_tex;
+    SDL_Rect random_map, choose_dif;
     get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*30/100, SCREEN_HEIGHT*28/100,
                       10*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
                       "Random Map", &random_map_tex, &random_map);
@@ -92,14 +82,8 @@ int main() {
                       "Choose Difficulty", &choose_dif_tex, &choose_dif);
 
     //diff pick
-    SDL_Texture* easy;
-    SDL_Texture* medium;
-    SDL_Texture* hard;
-
-    SDL_Rect easy_rec;
-    SDL_Rect medium_rec;
-    SDL_Rect hard_rec;
-
+    SDL_Texture* easy, *medium, *hard;
+    SDL_Rect easy_rec, medium_rec, hard_rec;
     get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*42/100, SCREEN_HEIGHT*28/100,
                       4*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*5/100,
                       "Easy", &easy, &easy_rec);
@@ -112,38 +96,35 @@ int main() {
 
 
     //new_game
-    SDL_Texture* map;
-    get_img_and_rect("../images/map.jpg", &map);
-    SDL_Rect map_rec;
-    map_rec.x = -SCREEN_WIDTH/8; map_rec.y = -SCREEN_HEIGHT/16;
-    map_rec.w = 22*SCREEN_WIDTH/16; map_rec.h = 20*SCREEN_HEIGHT/16;
-    srand(time(NULL));
-    int first = -1, second = -1;
-    int ran = rand()%10;
-    int bot_ran = rand()%10;
     SDL_Texture *places_tex;
     SDL_Rect places_rec;
+
+    //randoms
+    int ran = rand()%11;
+    int bot_ran = rand()%11;
     potion_ran = rand()%4;
 
+    //winning page
+    SDL_Texture* back_to_menu;
+    SDL_Rect back_to_menu_rec;
+    get_text_and_rect(color(0, 0, 0, 255), SCREEN_WIDTH*34/100, SCREEN_HEIGHT*72/100,
+                      8*SCREEN_WIDTH*4/100,SCREEN_HEIGHT*6/100,
+                      "Back to menu", &back_to_menu, &back_to_menu_rec);
 
-    get_all_usernames();
+
 
     while (shallExit == SDL_FALSE) {
         //starting game
         if(goto_start) {
-            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0x00, 0xff);
-            SDL_RenderClear(sdlRenderer);
-
             draw_start(start_bg_tex, logo_tex, name_tex, input_tex, submit_button, logo_rec,
                        name_rec, input_rec, submit_button_rec);
-
 
             SDL_Event e;
             while (SDL_PollEvent(&e)) {
                 switch(e.type) {
                     case SDL_QUIT:
                         shallExit = SDL_TRUE;
-                        put_in_file();
+                        put_all_usernames_in_file();
                         break;
                     case SDL_KEYDOWN:
                         if (e.key.keysym.sym == SDLK_BACKSPACE && strlen(username) > 0) {
@@ -198,27 +179,23 @@ int main() {
 
         //main menu
         if(goto_main_menu){
-            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0xff, 0xff);
-            SDL_RenderClear(sdlRenderer);
-
             draw_main_menu(main_menu_bg_tex, new_game, con_game, leaderboard, back, ingame_name, new_game_rec,
                            con_game_rec, leaderboard_rec, back_rec, ingame_name_rec);
             if(!signed_up){
                 get_all_usernames();
-                add_player();
+                if(check_for_duplicate()){
+                    add_player();
+                }
                 sort_players();
-                count_players++;
-                rmv_duplicate();
                 signed_up = true;
             }
-
 
             SDL_Event e;
             while(SDL_PollEvent(&e)){
                 switch (e.type) {
                     case SDL_QUIT:
                         shallExit = SDL_TRUE;
-                        put_in_file();
+                        put_all_usernames_in_file();
                         break;
                     case SDL_MOUSEBUTTONUP:
                         if(e.button.x >= SCREEN_WIDTH*40/100 && e.button.x <= SCREEN_WIDTH*60/100 &&
@@ -254,21 +231,14 @@ int main() {
 
         //leaderboard
         if(goto_leaderboard){
-            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0xff, 0xff);
-            SDL_RenderClear(sdlRenderer);
-
-            SDL_RenderCopy(sdlRenderer, main_menu_bg_tex, NULL, NULL);
-
-            boxColor(sdlRenderer, SCREEN_WIDTH*40/100, SCREEN_HEIGHT*70/100,
-                     SCREEN_WIDTH*60/100, SCREEN_HEIGHT*80/100, 0xffffff44);
-            SDL_RenderCopy(sdlRenderer, back, NULL, &back_rec);
+            draw_leaderboard(main_menu_bg_tex, back, leaderboard_player, leaderboard_player_rec, back_rec);
 
             SDL_Event e;
             while(SDL_PollEvent(&e)){
                 switch (e.type) {
                     case SDL_QUIT:
                         shallExit = SDL_TRUE;
-                        put_in_file();
+                        put_all_usernames_in_file();
                         break;
                     case SDL_MOUSEBUTTONUP:
                         if(e.button.x >= SCREEN_WIDTH*40/100 && e.button.x <= SCREEN_WIDTH*60/100 &&
@@ -285,22 +255,17 @@ int main() {
 
         }
 
-
         //map_picker
         if(goto_map_picker){
-            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0xff, 0xff);
-            SDL_RenderClear(sdlRenderer);
-
             draw_map_picker(main_menu_bg_tex, ingame_name, ingame_name_rec, random_map_tex, random_map,
                             choose_dif_tex, choose_dif, back, back_rec);
-
 
             SDL_Event e;
             while(SDL_PollEvent(&e)){
                 switch (e.type) {
                     case SDL_QUIT:
                         shallExit = SDL_TRUE;
-                        put_in_file();
+                        put_all_usernames_in_file();
                         break;
                     case SDL_MOUSEBUTTONUP:
                         if(e.button.x >= SCREEN_WIDTH*40/100 && e.button.x <= SCREEN_WIDTH*60/100 &&
@@ -314,27 +279,7 @@ int main() {
                             //start game
                             goto_map_picker = false;
                             goto_game = true;
-                            xy_maker(rand()%(14*SCREEN_WIDTH/100) + 11*SCREEN_WIDTH/100,
-                                     rand()%(17*SCREEN_HEIGHT/100) + 28*SCREEN_HEIGHT/100, ran);
-                            xy_maker(rand()%(8*SCREEN_WIDTH/100) + 29*SCREEN_WIDTH/100,
-                                     rand()%(15*SCREEN_HEIGHT/100) + 65*SCREEN_HEIGHT/100, (ran+1)%10);
-                            xy_maker(rand()%(12*SCREEN_WIDTH/100) + 85*SCREEN_WIDTH/100,
-                                     rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, (ran+2)%10);
-                            xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
-                                     rand()%(14*SCREEN_HEIGHT/100) + 63*SCREEN_HEIGHT/100, (ran+3)%10);
-                            //friendly
-                            xy_maker(rand()%(13*SCREEN_WIDTH/100) + 57*SCREEN_WIDTH/100,
-                                     rand()%(10*SCREEN_HEIGHT/100) + 30*SCREEN_HEIGHT/100, (ran+4)%10);
-                            xy_maker(rand()%(6*SCREEN_WIDTH/100) + 59*SCREEN_WIDTH/100,
-                                     rand()%(10*SCREEN_HEIGHT/100) + 45*SCREEN_HEIGHT/100, (ran+5)%10);
-                            xy_maker(rand()%(5*SCREEN_WIDTH/100) + 92*SCREEN_WIDTH/100,
-                                     rand()%(14*SCREEN_HEIGHT/100) + 66*SCREEN_HEIGHT/100, (ran+6)%10);
-                            xy_maker(rand()%(12*SCREEN_WIDTH/100) + 28*SCREEN_WIDTH/100,
-                                     rand()%(13*SCREEN_HEIGHT/100) + 12*SCREEN_HEIGHT/100, (ran+7)%10);
-                            xy_maker(rand()%(8*SCREEN_WIDTH/100) + 75*SCREEN_WIDTH/100,
-                                     rand()%(24*SCREEN_HEIGHT/100) + 23*SCREEN_HEIGHT/100, (ran+8)%10);
-                            xy_maker(rand()%(9*SCREEN_WIDTH/100) + 17*SCREEN_WIDTH/100,
-                                     rand()%(15*SCREEN_HEIGHT/100) + 47*SCREEN_HEIGHT/100, (ran+9)%10);
+                            map_maker(ran);
                             input_struct();
                         }
                         else if(e.button.x >= SCREEN_WIDTH*20/100 && e.button.x <= SCREEN_WIDTH*80/100 &&
@@ -352,9 +297,6 @@ int main() {
 
         //goto diff_pick
         if(goto_diff_pick){
-            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0x00, 0xff, 0xff);
-            SDL_RenderClear(sdlRenderer);
-
             draw_diff_pick(main_menu_bg_tex, ingame_name, ingame_name_rec, easy, medium, hard,
                            easy_rec, medium_rec, hard_rec, back, back_rec);
 
@@ -363,7 +305,7 @@ int main() {
                 switch (e.type) {
                     case SDL_QUIT:
                         shallExit = SDL_TRUE;
-                        put_in_file();
+                        put_all_usernames_in_file();
                         break;
                     case SDL_MOUSEBUTTONUP:
                         if(e.button.x >= SCREEN_WIDTH*40/100 && e.button.x <= SCREEN_WIDTH*60/100 &&
@@ -389,6 +331,7 @@ int main() {
                             xy_maker(95*SCREEN_WIDTH/100, 75*SCREEN_HEIGHT/100, 7);
                             xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
                             xy_maker(20*SCREEN_WIDTH/100, 40*SCREEN_HEIGHT/100, 9);
+                            xy_maker(40*SCREEN_WIDTH/100, 20*SCREEN_HEIGHT/100, 10);
                             input_struct();
 
                         }
@@ -409,6 +352,7 @@ int main() {
                             xy_maker(85*SCREEN_WIDTH/100, 55*SCREEN_HEIGHT/100, 7);
                             xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
                             xy_maker(20*SCREEN_WIDTH/100, 45*SCREEN_HEIGHT/100, 9);
+                            xy_maker(30*SCREEN_WIDTH/100, 80*SCREEN_HEIGHT/100, 10);
                             input_struct();
                         }
                         if(e.button.x >= SCREEN_WIDTH*35/100 && e.button.x <= SCREEN_WIDTH*65/100 &&
@@ -428,6 +372,7 @@ int main() {
                             xy_maker(85*SCREEN_WIDTH/100, 45*SCREEN_HEIGHT/100, 7);
                             xy_maker(60*SCREEN_WIDTH/100, 70*SCREEN_HEIGHT/100, 8);
                             xy_maker(30*SCREEN_WIDTH/100, 60*SCREEN_HEIGHT/100, 9);
+                            xy_maker(20*SCREEN_WIDTH/100, 20*SCREEN_HEIGHT/100, 10);
                             input_struct();
                         }
                         break;
@@ -443,10 +388,6 @@ int main() {
             SDL_RenderClear(sdlRenderer);
             SDL_RenderCopy(sdlRenderer, map, NULL, &map_rec);
 
-            point_adder++;
-            if(point_adder == 1000000){
-                point_adder = 0;
-            }
             draw_map();
             make_march();
             draw_march();
@@ -454,12 +395,14 @@ int main() {
             make_potion();
             apply_speed_point();
             stop_speed();
+            bot_movements(bot_ran);
+            check_winner();
             if(show_top_four) {
                 top_four(places_tex, places_rec);
             }
-            bot_movements(&first, &second, bot_ran);
-            check_winner();
 
+            point_adder++;
+            if(point_adder == 1000000){point_adder = 0;}
             bot_ran = rand()%10;
 
             SDL_Event e;
@@ -467,10 +410,10 @@ int main() {
                 switch(e.type) {
                     case SDL_QUIT:
                         shallExit = SDL_TRUE;
-                        put_in_file();
+                        put_all_usernames_in_file();
                         break;
                     case SDL_MOUSEBUTTONDOWN:
-                        selecting_bases(e, &first, &second);
+                        selecting_bases(e);
                         break;
                     case SDL_KEYDOWN:
                         if(e.key.keysym.sym == SDLK_TAB){
@@ -484,87 +427,33 @@ int main() {
 
         //goto winner
         if(goto_winner){
-            SDL_SetRenderDrawColor(sdlRenderer, 0xff, 0xff, 0xff, 0xff);
-            SDL_RenderClear(sdlRenderer);
-
-            SDL_RenderCopy(sdlRenderer, main_menu_bg_tex, NULL, NULL);
-            SDL_RenderCopy(sdlRenderer, congrats, NULL, &congrats_rec);
-
-            boxColor(sdlRenderer, SCREEN_WIDTH*40/100, SCREEN_HEIGHT*70/100,
-                     SCREEN_WIDTH*60/100, SCREEN_HEIGHT*80/100, 0xffffff44);
-            if(won){
-                if(pick_easy){
-                    get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
-                                      45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
-                                      "You won 20 pts", &winning_point, &winning_point_rec);
-                }
-                else if(pick_medium){
-                    get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
-                                      45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
-                                      "You won 40 pts", &winning_point, &winning_point_rec);
-                }
-                else if(pick_hard){
-                    get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
-                                      45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
-                                      "You won 60 pts", &winning_point, &winning_point_rec);
-                }
-                else{
-                    get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
-                                      45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
-                                      "You won 40 pts", &winning_point, &winning_point_rec);
-                }
-            }
-            else{
-                get_text_and_rect(color(70, 255, 255, 255), 35*SCREEN_WIDTH/100,
-                                  45*SCREEN_HEIGHT/100,30*SCREEN_WIDTH/100, 8*SCREEN_HEIGHT/100,
-                                  "You lost 15 pts", &winning_point, &winning_point_rec);
-            }
-            SDL_RenderCopy(sdlRenderer, winning_point, NULL, &winning_point_rec);
-
+            draw_winner(main_menu_bg_tex, back_to_menu, back_to_menu_rec);
 
             SDL_Event e;
             while(SDL_PollEvent(&e)){
                 switch (e.type) {
                     case SDL_QUIT:
                         shallExit = SDL_TRUE;
-                        put_in_file();
+                        put_all_usernames_in_file();
                         break;
+                    case SDL_MOUSEBUTTONUP:
+                        if(e.button.x >= SCREEN_WIDTH*33/100 && e.button.x <= SCREEN_WIDTH*67/100 &&
+                           e.button.y >= SCREEN_HEIGHT*70/100 && e.button.y <= SCREEN_HEIGHT*80/100){
+                            reset_game();
+                        }
                     default:
                         break;
                 }
             }
         }
 
-
-
         SDL_RenderPresent(sdlRenderer);
         SDL_Delay(1000 / FPS);
     }
 
-
-    SDL_DestroyTexture(start_bg_tex);
-    SDL_DestroyTexture(main_menu_bg_tex);
-    SDL_DestroyTexture(logo_tex);
-    SDL_DestroyTexture(name_tex);
-    SDL_DestroyTexture(submit_button);
-    SDL_DestroyTexture(ingame_name);
-    SDL_DestroyTexture(input_tex);
-    SDL_DestroyTexture(new_game);
-    SDL_DestroyTexture(con_game);
-    SDL_DestroyTexture(leaderboard);
-    SDL_DestroyTexture(back);
-    SDL_DestroyTexture(map);
-    SDL_DestroyTexture(random_map_tex);
-    SDL_DestroyTexture(choose_dif_tex);
-    SDL_DestroyTexture(easy);
-    SDL_DestroyTexture(medium);
-    SDL_DestroyTexture(hard);
-    SDL_DestroyTexture(places_tex);
-    SDL_DestroyTexture(points_tex);
-
-
-
+    destroy_all(start_bg_tex, main_menu_bg_tex, logo_tex, name_tex, submit_button, ingame_name, input_tex, new_game,
+                con_game, leaderboard, back, map, random_map_tex, choose_dif_tex, easy, medium, hard, places_tex,
+                leaderboard_player, back_to_menu);
     End();
-
     return 0;
 }
